@@ -32,4 +32,5 @@ URL: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7476518&isnumber=
 keywords: {Graphics processing unit;Finite difference methods;Time domain analysis;Parallel processing;Parallel programming;Parallel processing;parallel programming;FDTD methods;general purpose graphics processing unit (GPU);Compute Unified Device Architecture (CUDA)}, \
 URL: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5586593&isnumber=5586558
 
-
+- An Even Easier Introduction to CUDA \
+URL: https://developer.nvidia.com/blog/even-easier-introduction-cuda/

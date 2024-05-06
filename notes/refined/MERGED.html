@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MERGED.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="19simd-architecture">19_SIMD architecture</h1>
+<blockquote>
+<p>https://www.youtube.com/watch?v=gkMaO3yJMz0</p>
+</blockquote>
+<ul>
+<li><a href="#19_simd-architecture">19_SIMD architecture</a>
+<ul>
+<li><a href="#simd-vs-out-of-order-execution">SIMD vs Out-of-Order Execution:</a>
+<ul>
+<li><a href="#simd">SIMD</a></li>
+<li><a href="#out-of-order-execution">Out-of-Order Execution</a></li>
+<li><a href="#comparison">Comparison</a></li>
+<li><a href="#data-processing-in-simd-architectures">Data Processing in SIMD Architectures:</a></li>
+<li><a href="#example-of-operational-differences">Example of Operational Differences:</a></li>
+</ul>
+</li>
+<li><a href="#vector-stride-and-pipeline">Vector Stride and Pipeline:</a>
+<ul>
+<li><a href="#advantages-of-vector-processors">Advantages of Vector Processors:</a></li>
+<li><a href="#disadvantages-of-vector-processors">Disadvantages of Vector Processors:</a></li>
+</ul>
+</li>
+<li><a href="#amdahls-law">Amdahl's Law</a></li>
+<li><a href="#vector-registers-and-functional-units">Vector Registers and Functional Units:</a>
+<ul>
+<li><a href="#loading--storing-vectors-from--to-memory">Loading / Storing vectors from &amp; to memory</a>
+<ul>
+<li><a href="#how-do-we-achieve-this-with-a-memory-that-takes-more-than-1-cycle-to-access">How do we achieve this with a memory that takes more than 1 cycle to access?</a></li>
+</ul>
+</li>
+<li><a href="#memory-banking">Memory banking</a>
+<ul>
+<li><a href="#an-example">An example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#vector-chaining">Vector Chaining</a></li>
+<li><a href="#vector-stripmining">Vector stripmining</a></li>
+<li><a href="#gather--scatter-operations">Gather / Scatter operations</a>
+<ul>
+<li><a href="#gather-example">Gather example</a></li>
+<li><a href="#scatter-example">Scatter example</a></li>
+</ul>
+</li>
+<li><a href="#conditional-operations">Conditional operations</a>
+<ul>
+<li><a href="#1-example">1 Example</a></li>
+<li><a href="#2-example">2 Example</a></li>
+<li><a href="#implementation-of-masked-operations">Implementation of masked operations</a></li>
+<li><a href="#simple">Simple</a></li>
+<li><a href="#density-time">Density-Time</a></li>
+</ul>
+</li>
+<li><a href="#array-vs-vector-processors-again">Array vs Vector processors, again</a>
+<ul>
+<li><a href="#vector-instruction-level-parallelism">Vector instruction level parallelism</a></li>
+</ul>
+</li>
+<li><a href="#in-summary">In summary</a></li>
+</ul>
+</li>
+<li><a href="#20_gpu-architecture">20_GPU architecture</a>
+<ul>
+<li><a href="#overview-of-gpu-architecture">Overview of GPU Architecture</a></li>
+<li><a href="#limits-of-simd">Limits of SIMD</a></li>
+<li><a href="#performance-considerations">Performance Considerations</a></li>
+<li><a href="#historical-context-intel-pentium-mmx">Historical Context: Intel Pentium MMX</a>
+<ul>
+<li><a href="#intel-pentium-mmx-operations---90s">Intel Pentium MMX operations - 90s</a></li>
+</ul>
+</li>
+<li><a href="#deep-dive-into-gpus">Deep Dive into GPUs</a>
+<ul>
+<li><a href="#what-are-threads-in-gpu-terminology">What are threads in GPU terminology?</a></li>
+<li><a href="#programming-model-vs-execution-model">Programming Model vs. Execution Model</a></li>
+<li><a href="#gpus-as-simd-machines">GPUs as SIMD Machines</a></li>
+<li><a href="#what-are-warps">What are WARPs?</a>
+<ul>
+<li><a href="#example-spmd-on-simt-machine">Example: SPMD on SIMT machine</a></li>
+<li><a href="#how-do-they-operate">How do they operate</a></li>
+</ul>
+</li>
+<li><a href="#warp-and-thread-management">Warp and Thread Management:</a></li>
+<li><a href="#simd-vs-simt-execution-model">SIMD vs SIMT Execution Model</a></li>
+<li><a href="#advantages-of-simt">Advantages of SIMT</a></li>
+<li><a href="#fine-grained-multi-threading-of-warps">Fine-grained Multi-threading of Warps</a></li>
+<li><a href="#high-level-overview-of-gpu-architecture">High-level Overview of GPU Architecture</a></li>
+<li><a href="#gpu-vs-cpu">GPU vs. CPU</a></li>
+<li><a href="#simd-vs-simt">SIMD vs SIMT</a>
+<ul>
+<li><a href="#warp-instruction-level-parallelism">Warp Instruction Level Parallelism</a></li>
+<li><a href="#memory-access-in-gpu-architecture">Memory Access in GPU Architecture</a></li>
+</ul>
+</li>
+<li><a href="#warp-exposure-to-programmers">Warp Exposure to Programmers</a>
+<ul>
+<li><a href="#from-blocks-to-warps-in-gpus">From Blocks to Warps in GPUs</a></li>
+<li><a href="#warp-based-simd-vs-traditional-simd">Warp-based SIMD vs. Traditional SIMD</a></li>
+</ul>
+</li>
+<li><a href="#spmd-single-program--procedure-multiple-data">SPMD: Single Program (/ Procedure) Multiple Data</a></li>
+<li><a href="#flexibility-of-simt-in-grouping-threads-into-warps">Flexibility of SIMT in Grouping Threads into Warps</a>
+<ul>
+<li><a href="#conditional-control-flow-instructions">Conditional control flow instructions</a></li>
+<li><a href="#control-flow-problem-in-gpus--simt">Control flow problem in GPUs / SIMT</a></li>
+<li><a href="#dynamic-warp-formation--merging">Dynamic Warp Formation / Merging</a></li>
+</ul>
+</li>
+<li><a href="#when-are-gpus-not-efficient">When are GPUs not efficient?</a>
+<ul>
+<li><a href="#example-of-a-gpu---nvidia-geforce-gtx-285">Example of a GPU - NVIDIA GeForce GTX 285</a></li>
+<li><a href="#tensor-cores">Tensor Cores</a></li>
+</ul>
+</li>
+<li><a href="#simd-vs-simt-summary">SIMD vs SIMT Summary</a></li>
+<li><a href="#limits-of-simd-architecture">Limits of SIMD Architecture</a></li>
+<li><a href="#limits-of-simt-architecture">Limits of SIMT Architecture</a>
+<ul>
+<li><a href="#comparison-and-context">Comparison and Context</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#21_gpu_programming">21_GPU_PROGRAMMING</a>
+<ul>
+<li><a href="#topics">Topics</a></li>
+<li><a href="#tensor-cores-1">Tensor cores</a></li>
+<li><a href="#terminology">Terminology</a></li>
+<li><a href="#why-cuda-gpus-is-better-than-simd">Why CUDA (GPUs) is better than SIMD</a>
+<ul>
+<li><a href="#drawbacks">Drawbacks</a></li>
+</ul>
+</li>
+<li><a href="#cpu-vs-gpu">CPU vs GPU</a>
+<ul>
+<li><a href="#cpu">CPU</a></li>
+<li><a href="#gpu">GPU</a></li>
+</ul>
+</li>
+<li><a href="#gpu-computing">GPU computing</a>
+<ul>
+<li><a href="#traditional-program-structure">Traditional program structure</a>
+<ul>
+<li><a href="#terminology-1">Terminology</a></li>
+<li><a href="#recall-spmd">Recall: SPMD</a></li>
+</ul>
+</li>
+<li><a href="#cuda--opencl-programming-model">CUDA / OPENCL Programming Model</a>
+<ul>
+<li><a href="#traditional-program-structure-in-cuda">Traditional program structure in CUDA</a></li>
+<li><a href="#indexing-and-memory-access">Indexing and memory access</a>
+<ul>
+<li><a href="#how-is-it-actually-stored-in-memory">How is it actually stored in memory?</a></li>
+</ul>
+</li>
+<li><a href="#1d-grid-one-way-to-do-it">1D Grid (One way to do it)</a></li>
+<li><a href="#2d-grid-another-way-to-do-it">2D Grid (Another way to do it)</a></li>
+</ul>
+</li>
+<li><a href="#review-of-gpu-architecture">Review of GPU Architecture</a></li>
+<li><a href="#performance-considerations-1">Performance considerations</a>
+<ul>
+<li><a href="#memory-access---latency-hiding">Memory access - Latency hiding</a>
+<ul>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#memory-access---coalescing">Memory access - Coalescing</a>
+<ul>
+<li><a href="#example---uncoalesced-memory-accesses">Example - Uncoalesced memory accesses</a></li>
+<li><a href="#example---coalesced-memory-accesses">Example - Coalesced memory accesses</a></li>
+<li><a href="#aos-array-of-structures-vs-soa-structure-of-arrays">AoS (Array of Structures) vs SoA (Structure of Arrays)</a></li>
+</ul>
+</li>
+<li><a href="#memory-access---data-reuse">Memory access - Data reuse</a>
+<ul>
+<li><a href="#example-1">Example</a>
+<ul>
+<li><a href="#optimization-techniques-for-data-reuse">Optimization techniques for data reuse</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#shared-memory">Shared memory</a>
+<ul>
+<li><a href="#reducing-shared-memory-bank-conflicts">Reducing shared memory bank conflicts</a>
+<ul>
+<li><a href="#drawbacks-of-shared-memory">Drawbacks of shared memory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#simd-utilization">SIMD utilization</a>
+<ul>
+<li><a href="#example---intra-warp-divergence">Example - Intra warp divergence</a></li>
+<li><a href="#example---divergence-free-execution">Example - Divergence-free execution</a></li>
+<li><a href="#vector-reduction">Vector reduction</a>
+<ul>
+<li><a href="#naive-mapping">Naive mapping</a></li>
+<li><a href="#divergence-free-mapping">Divergence-free mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#atomic-operations">Atomic operations</a>
+<ul>
+<li><a href="#histogram-calculation">Histogram calculation</a>
+<ul>
+<li><a href="#optimizing-the-histogram-calculation">Optimizing the histogram calculation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#data-transfers-between-cpu-and-gpu">Data transfers between CPU and GPU</a>
+<ul>
+<li><a href="#types-of-data-transfers">Types of Data Transfers</a></li>
+<li><a href="#asynchronous-data-transfers">Asynchronous data transfers</a>
+<ul>
+<li><a href="#example---video-processing">Example - Video processing</a></li>
+</ul>
+</li>
+<li><a href="#unified-memory">Unified Memory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#collaborative-computing">Collaborative computing</a>
+<ul>
+<li><a href="#unified-memory-1">Unified Memory</a>
+<ul>
+<li><a href="#asynchronous-kernel-launches">Asynchronous kernel launches</a></li>
+<li><a href="#fine-grained-heterogeneity">Fine-grained heterogeneity</a></li>
+</ul>
+</li>
+<li><a href="#collaborative-patterns">Collaborative patterns</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#22_cuda">22_CUDA</a>
+<ul>
+<li><a href="#why-gpus">Why GPUs?</a></li>
+<li><a href="#cuda-compute-unified-device-architecture">CUDA (Compute Unified Device Architecture)</a>
+<ul>
+<li><a href="#cuda-programming-model">CUDA Programming Model</a>
+<ul>
+<li><a href="#kernels">Kernels</a></li>
+<li><a href="#thread-hierarchy">Thread Hierarchy</a></li>
+<li><a href="#memory-hierarchy">Memory Hierarchy</a></li>
+<li><a href="#heterogeneous-programming">Heterogeneous Programming</a>
+<ul>
+<li><a href="#unified-memory-2">Unified memory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#asynchronous-simt-programming-model">Asynchronous SIMT Programming Model</a>
+<ul>
+<li><a href="#asynchronous-operations">Asynchronous Operations</a></li>
+</ul>
+</li>
+<li><a href="#cuda-programming-interface">CUDA Programming Interface</a>
+<ul>
+<li><a href="#compilation-with-nvcc">Compilation with NVCC</a></li>
+<li><a href="#workflow">Workflow</a></li>
+<li><a href="#cuda-runtime">CUDA runtime</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>SIMD (Single Instruction, Multiple Data)</strong> architecture is a type of parallel computing architecture that performs the same operation on multiple data points simultaneously.</li>
+<li>In a SIMD architecture, multiple processing elements execute the same operation on different pieces of data at the same time, thereby achieving data-level parallelism.</li>
+<li>Two common forms of SIMD architectures are <strong>vector processors</strong> and <strong>array processors</strong>.
+<ul>
+<li><strong>Array Processors</strong>: In array processors, instructions operate on multiple data elements simultaneously using different processing elements. This form of SIMD architecture is characterized by having multiple processing elements that perform the same operation at the same time across different sets of data.</li>
+<li><strong>Vector Processors</strong>: Vector processors use a single instruction to perform operations on data stored in vector registers. These registers can hold multiple data elements, and a single instruction can operate on all these elements sequentially or in parallel, depending on the architecture.
+<img src="../images/Screenshot 2024-04-24 at 21.36.37.png" alt="SIMD architecture"/></li>
+</ul>
+</li>
+<li>A <strong>GPU</strong> represents a hybrid of array and vector processor architectures.</li>
+<li>The <strong>SIMD (Single Instruction, Multiple Data) architecture</strong> utilizes registers that store vectors, which are arrays of N elements of M bits each, instead of single scalar values.</li>
+</ul>
+<h3 id="simd-vs-out-of-order-execution">SIMD vs Out-of-Order Execution:</h3>
+<h4 id="simd">SIMD</h4>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Parallel Data Processing</strong>: SIMD allows a single instruction to simultaneously perform the same operation on multiple data points. This is particularly beneficial for tasks that can be parallelized at the data level, such as vector and matrix operations common in graphics, multimedia processing, and scientific computations.</li>
+<li><strong>Efficiency</strong>: By executing one instruction across many data elements, SIMD reduces the instruction cycle overhead, leading to better utilization of processing power for suitable tasks.</li>
+<li><strong>Energy Efficiency</strong>: Executing multiple operations simultaneously can be more energy-efficient than processing them serially, which is particularly valuable in mobile and embedded applications.</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Specialized Use Cases</strong>: SIMD is most effective when operations are uniform and can be applied simultaneously to multiple pieces of data. It is less useful for general-purpose computing where each data element might require different operations.</li>
+<li><strong>Programming Complexity</strong>: Utilizing SIMD often requires explicit programming effort, including managing data alignment and handling cases where data sizes do not match SIMD register widths.</li>
+</ul>
+<h4 id="out-of-order-execution">Out-of-Order Execution</h4>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Increased CPU Utilization</strong>: Out-of-order execution allows CPUs to make more efficient use of processor cycles by executing instructions as resources become available, rather than adhering strictly to the program order.</li>
+<li><strong>Latency Hiding</strong>: It helps in hiding the latency of slower operations like memory fetch and long arithmetic operations by rearranging the execution order to keep the execution units busy.</li>
+<li><strong>General Purpose</strong>: This approach is beneficial for a wide range of applications, as it automatically optimizes execution without special programming requirements.</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complexity</strong>: The CPU design becomes significantly more complex with out-of-order execution, which can increase the cost and power consumption of the processor.</li>
+<li><strong>Diminishing Returns</strong>: For highly sequential code or when dependencies between instructions are too tight, the advantages of out-of-order execution can be limited.</li>
+</ul>
+<h4 id="comparison">Comparison</h4>
+<ul>
+<li>SIMD and out-of-order execution are complementary techniques that address different aspects of parallelism and efficiency in computing.</li>
+<li>SIMD is well-suited for tasks with data-level parallelism, while out-of-order execution is more effective for improving the utilization of CPU resources and handling complex instruction dependencies.</li>
+</ul>
+<h4 id="data-processing-in-simd-architectures">Data Processing in SIMD Architectures:</h4>
+<ul>
+<li><strong>Vector processors</strong> handle data serially from vector registers:
+<ul>
+<li>Each cycle processes one element from the vector through a functional unit (FU) until all vector elements are processed.</li>
+</ul>
+</li>
+<li><strong>Array processors</strong> handle entire vectors simultaneously:
+<ul>
+<li>Performs operations like LOAD, ADD, and STORE on all elements at the same time, necessitating multiple FUs.</li>
+</ul>
+</li>
+</ul>
+<h4 id="example-of-operational-differences">Example of Operational Differences:</h4>
+<ul>
+<li><strong>To add two vectors of 32 elements:</strong>
+<ul>
+<li>An <strong>array processor</strong> would perform 32 LOADs, 32 ADDs, and 32 STOREs concurrently, requiring 32 FUs.</li>
+<li>A <strong>vector processor</strong> would sequentially perform:
+<ul>
+<li>LOAD0, then LOAD1 and ADD0, followed by LOAD2, ADD1, and STORE0, continuing in this fashion, utilizing fewer resources but at a slower rate.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-24 at 21.36.37.png" alt="SIMD architecture"/>
+<h3 id="vector-stride-and-pipeline">Vector Stride and Pipeline:</h3>
+<ul>
+<li><strong>Vector stride</strong> refers to the memory distance between consecutive elements in a vector. A stride of 1, where elements are contiguous, is optimal for performance.</li>
+<li>Vector instructions benefit from longer pipelines due to:
+<ul>
+<li>Lack of data dependencies, eliminating dependency checks.</li>
+<li>Absence of pipeline interlocks and control flows between vector elements.</li>
+<li>Predictable strides that simplify data prefetching and caching.</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-24 at 21.45.34.png" alt="SIMD architecture"/>
+<h4 id="advantages-of-vector-processors">Advantages of Vector Processors:</h4>
+<ul>
+<li><strong>High Data Throughput</strong>: Processes multiple data elements simultaneously, enhancing performance for data-intensive tasks.</li>
+<li><strong>Efficient Use of Resources</strong>: Amortizes instruction decoding overhead across multiple data elements, reducing the total number of instructions and saving processing power.
+<ul>
+<li>Reduces instruction fetch bandwidth requirements</li>
+<li>Amortizes instruction fetch &amp; control overhead over many data -&gt; leads to high energy efficiency per operation</li>
+<li>Fewer loops &amp; therefore fewer branches</li>
+</ul>
+</li>
+<li><strong>Reduced Power Consumption</strong>: Fewer instructions and efficient parallel processing lower energy usage, beneficial in energy-sensitive environments.</li>
+<li><strong>Simplified Programming for Parallelism</strong>: Inherent hardware parallelism simplifies coding for applications suited to vector operations, like matrix computations.</li>
+<li><strong>Optimized Performance for Specific Applications</strong>: Excels in applications involving large vectors or matrices, significantly outperforming scalar processors in these cases.</li>
+<li><strong>Pipelining</strong>: Employs deep pipelining to process different stages of vector operations simultaneously, boosting instruction throughput.
+<ul>
+<li>No intra-vector dependencies -&gt; no hardware interlocking -&gt; no pipeline stalls to prevent hazards.</li>
+<li>No control flow within a vector</li>
+<li>Predictable strides for efficient data prefetching and caching.</li>
+</ul>
+</li>
+<li><strong>Scalability</strong>: Scales effectively with added hardware resources, handling larger vectors or more operations without major power or complexity increases.</li>
+<li><strong>Handling Large Data Sets</strong>: Ideal for modern applications involving large datasets, such as machine learning and big data analysis.
+<ul>
+<li>predictable memory access pattern</li>
+</ul>
+</li>
+</ul>
+<h4 id="disadvantages-of-vector-processors">Disadvantages of Vector Processors:</h4>
+<ul>
+<li>Dependence on parallelizable data, suitable only for regular parallelism.
+<ul>
+<li>Becomes very inefficient if parallelism is irregular</li>
+</ul>
+</li>
+<li>Ineffective for data structures like linked lists, where the next element's position is unpredictable.</li>
+<li>Memory bandwidth can limit performance due to the large volume of data accessed per instruction.</li>
+</ul>
+<p>To quote:</p>
+<blockquote>
+<p>To program a vector machine, the compiler or hand coder must make the data structures in the code fit nearly exactly the regular structure built into the hardware. That's hard to do in first place, and just as hard to change. One tweak, and the low-level code has to be rewritten by a very smart and dedicated programmer who knows the hardware and often the subtleties of the application area.</p>
+</blockquote>
+<h3 id="amdahls-law">Amdahl's Law</h3>
+<ul>
+<li>Amdahl's Law is a fundamental principle in parallel computing that quantifies the potential speedup achievable by parallelizing a computation.</li>
+<li>It states that the overall speedup of a program is limited by the fraction of the program that cannot be parallelized.</li>
+<li>The law is expressed as a formula:
+<ul>
+<li><strong>Speedup = 1 / [(1 - P) + (P / N)]</strong></li>
+<li>Where:
+<ul>
+<li><strong>P</strong> is the fraction of the program that can be parallelized.</li>
+<li><strong>N</strong> is the number of processors or cores available for parallel execution.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="vector-registers-and-functional-units">Vector Registers and Functional Units:</h3>
+<ul>
+<li><strong>Vector registers</strong> store multiple M-bit elements:
+<ul>
+<li>Controlled by <strong>vector control registers</strong>:
+<ul>
+<li><strong>VLEN</strong> (vector length)</li>
+<li><strong>VSTR</strong> (vector stride)</li>
+<li><strong>VMASK</strong> (mask for conditional operations, enabling selective processing based on specified conditions, such as VMASK[i] = (V_k[i] == 0)).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Vector functional units (FU)</strong> can be deeply pipelined, exploiting the independent processing of elements to enhance throughput.</li>
+</ul>
+<h4 id="loading--storing-vectors-from--to-memory">Loading / Storing vectors from &amp; to memory</h4>
+<ul>
+<li>Multiple elements need to be loaded/stored from/to memory in a single instruction.</li>
+<li>The elements are separated by a fixed stride.</li>
+</ul>
+<h5 id="how-do-we-achieve-this-with-a-memory-that-takes-more-than-1-cycle-to-access">How do we achieve this with a memory that takes more than 1 cycle to access?</h5>
+<ul>
+<li>Bank the memory</li>
+<li>Interleave the memory accesses across the banks</li>
+</ul>
+<h4 id="memory-banking">Memory banking</h4>
+<ul>
+<li>Memory is divided into multiple banks, that can be accessed simultaneously.</li>
+<li>Banks share address and data buses (to reduce memory chip pins required)</li>
+<li>This way can start and complete one bank access per cycle</li>
+<li>Can sustain N concurrent accesses if all N go to different banks</li>
+</ul>
+<img src="../images/Screenshot 2024-04-25 at 15.13.15.png" alt="Banking"/>
+<h5 id="an-example">An example</h5>
+<ul>
+<li>For i = 0 to 49</li>
+<li>C[i] = (A[i] + B[i]) / 2</li>
+</ul>
+<pre class="hljs"><code><div>    MOVI R0 = 50            1
+    MOVA R1 = A             1
+    MOVA R2 = B             1
+    MOVA R3 = C             1
+X:
+    LD R4 = MEM[R1++]       11  ;autoincrement addressing
+    LD R5 = MEM[R2++]       11
+    ADD R6 = R4 + R5        4
+    SHFR R7 = R6 &gt;&gt; 1       1
+    ST MEM[R3++] = R7       11
+    DECBNZ R0, X            2   ;decrement and branch if NZ
+</div></code></pre>
+<p>-&gt; 304 dynamic instructions</p>
+<ul>
+<li>
+<p>Assuming scalar execution time in-order with 1 bank</p>
+<ul>
+<li>first 2 loads in the loop cannot be pipelined -&gt; 2*11 cycles</li>
+<li>4+50*40 = 2004 cycles</li>
+</ul>
+</li>
+<li>
+<p>Assuming scalar execution time in-order processor with 1 bank with 2 memory ports (which can be used concurrently) or 2 banks</p>
+<ul>
+<li>first 2 loads in the loop can be pipelined -&gt; 1 + 11 cycles</li>
+<li>4+50*30 = 1504 cycles</li>
+</ul>
+</li>
+<li>
+<p>Since the loop can be vectorized (since each iteration is independent of any other)</p>
+</li>
+</ul>
+<pre class="hljs"><code><div>    MOVI VLEN = 50              1
+    MOVI VSTR = 1               1
+    VLD V0 = A                  11 + VLEN – 1
+    VLD V1 = B                  11 + VLEN – 1
+    VADD V2 = V0 + V1           4 + VLEN – 1
+    VSHFR V3 = V2 &gt;&gt; 1          1 + VLEN – 1
+    VST C = V3                  11 + VLEN – 1
+</div></code></pre>
+<ul>
+<li>Assuming
+<ul>
+<li><strong>no chaining</strong> (no vector data forwarding -&gt; output of a vector FU cannot be used as input to another vector FU in the same cycle)</li>
+<li>entire vector registers need to be ready before the operation can start</li>
+<li>1 memory port (one address generator) per bank</li>
+<li>16 banks (word-interleaved: consecutive elements of an array are stored in consecutive banks)</li>
+</ul>
+</li>
+</ul>
+<p>-&gt; 1+1+11+49+11+49+4+49+1+49+11+49 = 285 cycles</p>
+<img src="../images/Screenshot 2024-04-25 at 15.27.40.png" alt="example vector"/>
+<ul>
+<li>why 16 banks?
+<ul>
+<li>11-cycle memory access latency</li>
+<li>having 16 (&gt; 11) banks ensures there are enough banks to overlap enough memory operations to cover memory latency</li>
+</ul>
+</li>
+<li>assuming unit stride of 1 (VSTR = 1)</li>
+<li>what if stride &gt; 1?
+<ul>
+<li>how can we endure we can access 1 element per cycle when memory latency is 11 cycles? <strong>VECTOR CHAINING</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="vector-chaining">Vector Chaining</h3>
+<ul>
+<li><strong>Vector chaining</strong> allows the output of one vector operation to be used as the input for the next operation in the same cycle.</li>
+</ul>
+<img src="../images/Screenshot 2024-04-25 at 15.30.40.png" alt="vector chaining"/>
+<ul>
+<li>In the previous example, assuming vector chaining is possible
+<ul>
+<li>1+1+11+49+11+49+49+11 = 182 cycles</li>
+</ul>
+</li>
+</ul>
+<h3 id="vector-stripmining">Vector stripmining</h3>
+<ul>
+<li>Occurs, for example, when # data elements &gt; # elements in a vector register</li>
+<li>The loop can be broken down into # elements in the vector register
+<ul>
+<li>E.g. 527 data elements, 64-element VREGs</li>
+<li>8 iteration where VLEN = 64</li>
+<li>1 iteration where VLEN = 15 (the VLEN must be changed at runtime)</li>
+</ul>
+</li>
+</ul>
+<h3 id="gather--scatter-operations">Gather / Scatter operations</h3>
+<ul>
+<li>Occurs when the vector data is not stored in a strided fashion (irregular memory access to a vector)</li>
+<li>Indirection will be used to combine / pack elements into vector registers</li>
+</ul>
+<h4 id="gather-example">Gather example</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i&lt;N; i++)
+    A[i] = B[i] + C[D[i]]
+</div></code></pre>
+<pre class="hljs"><code><div>LV vD, rD       # Load indices in D vector
+LVI vC, rC, vD  # Load indirect from rC base &lt;- **Gathering**
+LV vB, rB       # Load B vector
+ADDV.D vA,vB,vC # Do add
+SV vA, rA       # Store result
+</div></code></pre>
+<h4 id="scatter-example">Scatter example</h4>
+<pre class="hljs"><code><div>Index Vector                Data Vector (to Store)              Stored vector (in memory)
+0                           3.14                                Base+0  3.14
+2                           6.5                                 Base+1  X
+6                           71.2                                Base+2  6.5
+7                           2.71                                Base+3  X
+                                                                Base+4  X
+                                                                Base+5  X
+                                                                Base+6  71.2
+                                                                Base+7  2.71
+</div></code></pre>
+<h3 id="conditional-operations">Conditional operations</h3>
+<ul>
+<li><strong>Masking</strong> is used to conditionally execute operations on vector elements</li>
+<li>VMask register is a bit mask determining which data element should not be acted upon</li>
+</ul>
+<h4 id="1-example">1 Example</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i&lt;N; i++)
+    <span class="hljs-keyword">if</span> (a[i] != <span class="hljs-number">0</span>) then b[i]=a[i]*b[i]
+</div></code></pre>
+<pre class="hljs"><code><div>VLD V0 = A
+VLD V1 = B
+VMASK = (V0 != 0)
+VMUL V1 = V0 * V1
+VST B = V1
+</div></code></pre>
+<ul>
+<li>Named, predicated execution in some architectures. Execution is predicated on mask bit</li>
+</ul>
+<h4 id="2-example">2 Example</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">64</span>; ++i)
+    <span class="hljs-keyword">if</span> (a[i] &gt;= b[i]) 
+        c[i] = a[i]
+    <span class="hljs-keyword">else</span> 
+        c[i] = b[i]
+</div></code></pre>
+<pre class="hljs"><code><div>A       B       VMASK
+1       2       0
+2       2       1
+3       2       1
+4       10      0
+-5      -4      0
+0       -3      1
+6       5       1
+-7      -8      1
+</div></code></pre>
+<h4 id="implementation-of-masked-operations">Implementation of masked operations</h4>
+<h4 id="simple">Simple</h4>
+<ul>
+<li>Execute all N operations, turn off result WB according to the mask</li>
+</ul>
+<h4 id="density-time">Density-Time</h4>
+<ul>
+<li>scan mask vector and only execute elements with non-zero masks</li>
+</ul>
+<h3 id="array-vs-vector-processors-again">Array vs Vector processors, again</h3>
+<ul>
+<li>Array vs vector processors distinction is a &quot;purist's&quot; distinction</li>
+<li>Most &quot;modern&quot; SIMD processors are hybrids of the two
+<ul>
+<li>exploiting data parallelism in both time and space</li>
+<li><a href="./20_GPU_ARCHITECTURE.md">GPUs</a> are a prime example</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-25 at 15.49.27.png" alt="array vs vector"/>
+<h4 id="vector-instruction-level-parallelism">Vector instruction level parallelism</h4>
+<ul>
+<li>Can overlap execution of multiple vector instructions
+<ul>
+<li>Example, machine has 32 elements per vector register and 8 lanes</li>
+<li>Example, with 24 operations/cycle (on steady state) while issuing 1 vector instruction/cycle</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>What is a lane? Refer to the individual execution units within a processor that can independently execute operations on different elements of a vector simultaneously. Each lane operates on a separate data element but under the same instruction.
+<img src="../images/Screenshot 2024-04-25 at 15.52.55.png" alt="vector instruction level parallelism"/></p>
+</blockquote>
+<h3 id="in-summary">In summary</h3>
+<ul>
+<li>Vector / SIMD machines are good at exploiting regular data-level parallelism
+<ul>
+<li>Same operation performed on many data elements</li>
+<li>Improve performance, simplify design (no intra-vector dependencies)</li>
+</ul>
+</li>
+<li>Performance improvement limited by vectorizability of code
+<ul>
+<li>Scalar operations limit vector machine performance</li>
+<li>Amdahl's law</li>
+</ul>
+</li>
+<li>Many existing ISAs include (vector-like) SIMD operations
+<ul>
+<li>Intel MMX / SSEn / AVX, PowerPC AltiVec, ARM Advanced SIMD (NEON)</li>
+</ul>
+</li>
+</ul>
+<h1 id="20gpu-architecture">20_GPU architecture</h1>
+<blockquote>
+<p>https://www.youtube.com/watch?v=UFD8K-lprbQ</p>
+</blockquote>
+<h2 id="overview-of-gpu-architecture">Overview of GPU Architecture</h2>
+<ul>
+<li>GPUs are both vector processors and array processors, a mix of the two. Both types fall under the SIMD (Single Instruction Multiple Data) category.</li>
+<li><strong>Memory banking</strong> is the division of memory into multiple units to allow more simultaneous data access.</li>
+</ul>
+<h2 id="limits-of-simd">Limits of SIMD</h2>
+<ul>
+<li>SIMD faces limitations if the data being processed is not vectorizable, such as:
+<ul>
+<li>Linked lists</li>
+<li>Any algorithm that is not vectorizable, i.e., data elements are not independent.</li>
+</ul>
+</li>
+</ul>
+<h2 id="performance-considerations">Performance Considerations</h2>
+<ul>
+<li>Where SIMD is applicable, there is a notable performance gain. However, performance improvements are still bound by Amdahl's Law, which applies to programs only partially parallelized; the speedup is limited by the sequential portion of the program.</li>
+<li>Modern processors include SIMD extensions and can switch between serial and SIMD instruction modes.</li>
+</ul>
+<h2 id="historical-context-intel-pentium-mmx">Historical Context: Intel Pentium MMX</h2>
+<h3 id="intel-pentium-mmx-operations---90s">Intel Pentium MMX operations - 90s</h3>
+<ul>
+<li>Concept: one instruction operates on multiple data elements simultaneously -&gt; SIMD!</li>
+<li>No VLEN register.</li>
+<li>Opcode determines the data type:
+<ul>
+<li>8 -&gt; 8-bit bytes</li>
+<li>4 -&gt; 16-bit words</li>
+<li>2 -&gt; 32-bit doublewords</li>
+<li>1 -&gt; 64-bit quadwords</li>
+</ul>
+</li>
+<li>STRIDE is always 1.</li>
+</ul>
+<h2 id="deep-dive-into-gpus">Deep Dive into GPUs</h2>
+<ul>
+<li>GPUs are essentially SIMD engines under the hood.</li>
+<li>The pipeline operates like a SIMD (array processor) pipeline.</li>
+<li>Programming is not done via SIMD instructions but through <strong>threads</strong>.</li>
+</ul>
+<h3 id="what-are-threads-in-gpu-terminology">What are threads in GPU terminology?</h3>
+<ul>
+<li>In GPU parlance, a thread is a single sequence of programmed instructions that operates on an independent set of data.</li>
+<li>Logical vs. Physical Resources: A thread is not directly a piece of physical hardware. Instead, it is a logical execution unit that the GPU's hardware can manage. Threads are mapped to physical hardware resources when they are scheduled for execution.</li>
+<li>Execution Context: Each thread has its own execution context, which includes:
+<ul>
+<li>Registers: Each thread has access to a set of registers.</li>
+<li>Local memory (if any): Threads may also have access to small amounts of local memory specific to that thread.</li>
+<li>Program Counter: Each thread does not independently possess a physical program counter. Instead, all threads in a <strong>warp</strong> share the same instruction stream and thus follow the same program counter for their execution path.</li>
+</ul>
+</li>
+</ul>
+<h3 id="programming-model-vs-execution-model">Programming Model vs. Execution Model</h3>
+<ul>
+<li><strong>Programming model</strong>: How the programmer writes the code, can be:
+<ul>
+<li>Sequential (von Neumann)</li>
+<li>Data parallel (SIMD)</li>
+<li>Dataflow</li>
+<li>Multi-threaded (MIMD, SPMD)</li>
+</ul>
+</li>
+<li><strong>Execution model</strong>: How the hardware executes the code
+<ul>
+<li>Out-of-order execution</li>
+<li>Vector processor</li>
+<li>Array processor</li>
+<li>Dataflow processor</li>
+<li>Multiprocessor</li>
+<li>Multithreaded processor</li>
+</ul>
+</li>
+<li>The execution Model can be very different from the programming model
+<ul>
+<li>E.g. Von Neumann model implemented by an OoO (Out of Order) processor.</li>
+<li>E.g. SPMD model implemented by a SIMD processor (a GPU)</li>
+</ul>
+</li>
+</ul>
+<h3 id="gpus-as-simd-machines">GPUs as SIMD Machines</h3>
+<ul>
+<li>In practice, a GPU is a SIMD machine without the need for SIMD instructions; it is programmed using THREADs (SPMD programming model).
+<ul>
+<li>Each thread executes the same code but on different data.</li>
+<li>Each thread maintains its own context and can be used, reset, and executed independently.</li>
+</ul>
+</li>
+<li>A set of threads executing the same instruction are dynamically grouped into <strong>WARPs (wavefront)</strong> by the hardware.</li>
+<li>GPUs can be viewed as SIMD machines not exposed to the programmer (SIMT = single instruction multiple threads).</li>
+</ul>
+<h3 id="what-are-warps">What are WARPs?</h3>
+<ul>
+<li>WARPs are groups of threads that execute the same instruction. Typically, 32 threads are grouped into a WARP.</li>
+<li>A warp is essentially a SIMD operation formed by the hardware.</li>
+<li>A set of threads that execute the same instruction (on different data elements) -&gt; SIMT (Nvidia-speak)</li>
+</ul>
+<img alt="What are warps" src="../images/Screenshot 2024-04-25 at 16.46.33.png" />
+<h4 id="example-spmd-on-simt-machine">Example: SPMD on SIMT machine</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i &lt; N; i++)
+    C[i] = A[i] + B[i];
+</div></code></pre>
+<img alt="SPMD on SIMT" src="../images/Screenshot 2024-04-25 at 16.39.12.png" />
+<h4 id="how-do-they-operate">How do they operate</h4>
+<ul>
+<li>Uniform Instruction Execution: All threads in a warp execute the same instruction at once but on different pieces of data. This design leverages the data parallelism that GPUs are optimized for, such as in graphics rendering or scientific computations where the same operations are performed over a large set of data elements.</li>
+<li>Handling Divergence: If threads within a warp need to execute different instructions (due to conditional branching, for instance), this causes what's known as &quot;warp divergence.&quot; The GPU handles divergence by serially executing each branch path needed by any thread in the warp, while other threads wait (idle). This can lead to inefficiencies and is one of the challenges in optimizing GPU code.</li>
+</ul>
+<h3 id="warp-and-thread-management">Warp and Thread Management:</h3>
+<ul>
+<li><strong>Shared Execution</strong>: Because all threads in a warp execute the same instruction simultaneously, they can be thought of as sharing a single program counter at the level of the warp. This means if threads need to execute different instructions because of conditional branching, the warp must serialize these branches, handling each outcome path one at a time, which can lead to inefficiencies.</li>
+<li><strong>Resource Allocation</strong>: The CUDA cores (hardware execution units) do not belong to any specific thread permanently. They are allocated dynamically to threads as warps are scheduled to execute. This means the hardware resources are shared and managed across potentially thousands of threads.</li>
+</ul>
+<h3 id="simd-vs-simt-execution-model">SIMD vs SIMT Execution Model</h3>
+<ul>
+<li><strong>SIMD</strong>: a single sequential instruction stream -&gt; <code>[VLD, VLD, VADD, VST], VLEN</code></li>
+<li><strong>SIMT</strong>: multiple scalar instruction streams -&gt; threads dynamically grouped into <strong>warps</strong>, effectively removing the need for a <code>VLEN, VMASK in SIMD -&gt; [LD, LD, ADD, ST], NumThreads</code></li>
+</ul>
+<h3 id="advantages-of-simt">Advantages of SIMT</h3>
+<ul>
+<li>In SIMT, the programmer can continue to program in the von Neumann model; the hardware takes care of the rest.</li>
+<li>Each thread can be treated separately -&gt; can execute more threads independently -&gt; MIMD processing.</li>
+<li>Can flexibly group threads into warps to maximize the benefits of SIMD.</li>
+</ul>
+<h3 id="fine-grained-multi-threading-of-warps">Fine-grained Multi-threading of Warps</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i &lt; N; i++)
+    C[i] = A[i] + B[i];
+</div></code></pre>
+<ul>
+<li>Warp of 32 threads.</li>
+<li>If there are 32k iterations &amp; 1 iteration/thread -&gt; 1k warps (each warp has 32 threads).</li>
+<li>Each warp can be interleaved on the same pipeline -&gt; fine grained multithreading of warps</li>
+</ul>
+<img alt="Fine-grained Multi-threading of Warps" src="../images/Screenshot 2024-04-25 at 16.44.49.png" />
+<h3 id="high-level-overview-of-gpu-architecture">High-level Overview of GPU Architecture</h3>
+<img alt="High-level Overview of GPU Architecture" src="../images/Screenshot 2024-04-25 at 16.48.04.png" />
+<h3 id="gpu-vs-cpu">GPU vs. CPU</h3>
+<ul>
+<li>GPUs do not do branch prediction or check on data dependencies.</li>
+<li>A GPU essentially schedules warps in the pipeline.</li>
+<li>The pipeline remains very simple:
+<ul>
+<li>One instruction per thread at a time (no interlocking).</li>
+<li>Interleaving warp execution to mask latencies.</li>
+</ul>
+</li>
+</ul>
+<h3 id="simd-vs-simt">SIMD vs SIMT</h3>
+<ul>
+<li>SIMD: VADD A,B -&gt; C</li>
+<li>SIMT: ADD A[tid], B[tid] -&gt; C[tid]
+<ul>
+<li>tid = threadId</li>
+<li>The structure can remain the same as a SIMD processor, but using <strong>tid</strong>.</li>
+</ul>
+</li>
+</ul>
+<img alt="SIMD vs SIMT" src="../images/Screenshot 2024-04-25 at 16.49.28.png" />
+<h4 id="warp-instruction-level-parallelism">Warp Instruction Level Parallelism</h4>
+<ul>
+<li>Similar to <a href="./19_SIMD.md#vector-instruction-level-parallelism">SIMD</a>, but with threads.</li>
+<li>Can overlap execution of multiple instructions
+<ul>
+<li>Example machine has 32 threads per warp and 8 lanes</li>
+<li>Completes 24 operations / cycle (steady state) while issuing 1 warp / cycle</li>
+</ul>
+</li>
+</ul>
+<img alt="Warp instruction level parallelism" src="../images/Screenshot 2024-04-25 at 16.51.29.png" />
+<h4 id="memory-access-in-gpu-architecture">Memory Access in GPU Architecture</h4>
+<ul>
+<li>The same instruction in different threads uses the <strong>tid</strong> as an index to access different data.
+<img alt="GPU Memory Access Diagram" src="../images/Pasted image 20240421164115.png" /></li>
+<li>When programming, it is necessary to partition the data across different threads.</li>
+<li>For maximum performance, the memory must have sufficient bandwidth.</li>
+</ul>
+<h3 id="warp-exposure-to-programmers">Warp Exposure to Programmers</h3>
+<ul>
+<li>Warps <strong>are not exposed</strong> to the programmer.</li>
+<li><strong>CPU threads &amp; GPU kernels</strong>:
+<ul>
+<li>Sequential or minimally parallelized sections on the CPU.</li>
+<li>High parallelism sections on the GPU: <strong>blocks of threads</strong>.</li>
+<li>Serial code makes sense to run on the CPU because it is better at it.
+<img alt="CPU vs GPU code Execution" src="../images/Pasted image 20240421165556.png" /></li>
+</ul>
+</li>
+<li>GPUs have been very successful also because the code for a CPU is very similar to that for a GPU.<pre class="hljs"><code><div><span class="hljs-comment">// CPU CODE</span>
+<span class="hljs-keyword">for</span> (ii = <span class="hljs-number">0</span>; ii &lt; <span class="hljs-number">100000</span>; ++ii) {
+    C[ii] = A[ii] + B[ii];
+}
+
+<span class="hljs-comment">// CUDA CODE</span>
+<span class="hljs-comment">// there are 100000 threads</span>
+<span class="hljs-function">__global__ <span class="hljs-keyword">void</span> <span class="hljs-title">KernelFunction</span><span class="hljs-params">(...)</span> </span>{
+    <span class="hljs-keyword">int</span> tid = blockDim.x * blockIdx.x + threadIdx.x;
+    <span class="hljs-keyword">int</span> varA = aa[tid];
+    <span class="hljs-keyword">int</span> varB = bb[tid];
+    C[tid] = varA + varB;
+}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// CPU Program</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> add <span class="hljs-title">matrix</span><span class="hljs-params">(<span class="hljs-keyword">float</span> *a, <span class="hljs-keyword">float</span>* b, <span class="hljs-keyword">float</span> *c, <span class="hljs-keyword">int</span> N)</span> </span>{
+  <span class="hljs-keyword">int</span> index;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> <span class="hljs-number">1</span> = <span class="hljs-number">0</span>; <span class="hljs-number">1</span> &lt; N; ++<span class="hljs-number">1</span>)
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; N; ++j) {
+    index = i + j*N;
+    c[index] = a[index] + b[index];
+    }
+  }
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span> <span class="hljs-params">()</span> </span>{
+  <span class="hljs-function">add <span class="hljs-title">matrix</span> <span class="hljs-params">(a, b, c, N)</span></span>;
+}
+
+<span class="hljs-comment">// GPU Program</span>
+<span class="hljs-function">__global__ <span class="hljs-title">add_matrix</span> <span class="hljs-params">(<span class="hljs-keyword">float</span> *a, <span class="hljs-keyword">float</span> *b, <span class="hljs-keyword">float</span> *c, <span class="hljs-keyword">int</span> N)</span></span>{
+  <span class="hljs-keyword">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;
+  <span class="hljs-keyword">int</span> j = blockIdx.y * blockDim.y + threadIdx.y;
+  <span class="hljs-keyword">int</span> index = i + j * N;
+  <span class="hljs-keyword">if</span> (i &lt; N &amp;&amp; j &lt; N)
+    c[index] = a[index] + b[index];
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span> <span class="hljs-params">()</span> </span>{
+  <span class="hljs-function">dim3 <span class="hljs-title">dimBlock</span><span class="hljs-params">(blocksize, blocksize)</span></span>;
+  <span class="hljs-function">dim3 <span class="hljs-title">dimGrid</span><span class="hljs-params">(N/blocksize, N/blocksize)</span></span>;
+  add_matrix &lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt; (a, b, c, N);
+}
+</div></code></pre>
+</li>
+</ul>
+<h4 id="from-blocks-to-warps-in-gpus">From Blocks to Warps in GPUs</h4>
+<ul>
+<li>GPU core = a SIMD pipeline.
+<ul>
+<li>Streaming processor (SP)</li>
+<li>Many such SIMD processors
+<ul>
+<li>Streaming multiprocessor (SM)
+<img alt="Streaming Multiprocessor Architecture" src="../images/Pasted image 20240421170114.png" /></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Blocks are divided into WARPs.
+<ul>
+<li>SIMD / SIMT unit (32 threads)
+<img alt="Warp Configuration" src="../images/Pasted image 20240421170146.png)" /></li>
+</ul>
+</li>
+</ul>
+<h4 id="warp-based-simd-vs-traditional-simd">Warp-based SIMD vs. Traditional SIMD</h4>
+<ul>
+<li>Traditional SIMD is executed on a single thread.
+<ul>
+<li>Sequential instruction execution -&gt; lock-step (all execute the same operation at the same time and in the same operational cycle) operations in a SIMD instruction.</li>
+<li>The programming model must be SIMD (no extra threads) -&gt; the software must know the vector length.</li>
+<li>ISA contains vector / SIMD instructions.</li>
+</ul>
+</li>
+<li>WARP based SIMD, more scalar threads executing in a SIMD-like manner (the same instruction executed by all threads).
+<ul>
+<li>No lock step.</li>
+<li>Each thread can be treated individually (different warps) -&gt; the programming model IS NOT SIMD.
+<ul>
+<li>The software does not need to know the VLEN.</li>
+<li>Multithreading and dynamic grouping of threads are possible.</li>
+</ul>
+</li>
+<li>Scalar ISA.
+=&gt; Essentially an SPMD programming model implemented on SIMD hardware.</li>
+</ul>
+</li>
+</ul>
+<h3 id="spmd-single-program--procedure-multiple-data">SPMD: Single Program (/ Procedure) Multiple Data</h3>
+<ul>
+<li>It is a programming model, not an architectural structure.</li>
+<li>Each functional unit executes the same procedure but on different data.
+<ul>
+<li>The procedures can be synchronized at certain points in the program (e.g., barriers).</li>
+</ul>
+</li>
+<li>Multiple execution streams run the same program.
+<ul>
+<li>Each program/procedure:
+<ul>
+<li>Works on different data.</li>
+<li>Can execute a different control-flow path at runtime (!).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="flexibility-of-simt-in-grouping-threads-into-warps">Flexibility of SIMT in Grouping Threads into Warps</h3>
+<h4 id="conditional-control-flow-instructions">Conditional control flow instructions</h4>
+<ul>
+<li>Each thread can have conditional control flow instructions</li>
+<li>Threads can execute different control flow paths
+<img alt="SIMT Thread Grouping" src="../images/Pasted image 20240421171233.png" /></li>
+</ul>
+<h4 id="control-flow-problem-in-gpus--simt">Control flow problem in GPUs / SIMT</h4>
+<ul>
+<li>A GPU uses a SIMD pipeline to save area on control logic
+<ul>
+<li>Groups scalar threads into warps</li>
+</ul>
+</li>
+<li>Branch divergence occurs then threads inside warps branch to different execution paths</li>
+</ul>
+<img alt="Branch Divergence" src="../images/Screenshot 2024-04-25 at 17.07.57.png" />
+<ul>
+<li>If there are many threads, they can be:
+<ul>
+<li>Grouped more threads that are at the same PC.</li>
+<li>Grouped into a single warp dynamically.</li>
+<li>The result is a reduction in &quot;divergence&quot; -&gt; SIMD utilization increases.
+<ul>
+<li>SIMD utilization: the fraction of SIMD lanes executing a useful operation (e.g., executing an active thread).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="dynamic-warp-formation--merging">Dynamic Warp Formation / Merging</h4>
+<ul>
+<li>
+<p>The idea is to merge threads that are executing the same instruction (i.e., at the same PC) after executing a branch.</p>
+</li>
+<li>
+<p>Essentially, create new warps with waiting warps to improve SIMD utilization.</p>
+<img alt="Advanced Warp Management" src="../images/Pasted image 20240421172104.png" />
+</li>
+<li>
+<p>In a complex example...</p>
+<img alt="Complex Warp Management" src="../images/Pasted image 20240421172335.png" />
+</li>
+<li>
+<p>Can threads be moved to different lines of the pipeline? -&gt; NO</p>
+</li>
+</ul>
+<h3 id="when-are-gpus-not-efficient">When are GPUs not efficient?</h3>
+<ul>
+<li>Branch divergence: when threads in a warp take different paths.</li>
+<li>Long latency operations: when threads in a warp are waiting for a memory access.</li>
+</ul>
+<h4 id="example-of-a-gpu---nvidia-geforce-gtx-285">Example of a GPU - NVIDIA GeForce GTX 285</h4>
+<ul>
+<li>240 stream processors.</li>
+<li>SIMT execution.</li>
+<li>30 cores.</li>
+<li>8 SIMD FU per core.
+<ul>
+<li>By today's standards, it is SMALL.
+<img alt="NVIDIA GeForce GTX" src="../images/Pasted image 20240421172837.png" /></li>
+<li>32 threads in a warp &amp; 32 warps -&gt; 1024 threads that can be used thus requiring 64 KB of storage for the threads (registers).
+<img alt="Thread and Warp" src="../images/Pasted image 20240421173033.png" /></li>
+</ul>
+</li>
+</ul>
+<h4 id="tensor-cores">Tensor Cores</h4>
+<ul>
+<li>What are TENSOR CORES -&gt; essentially, they are cores specialized for performing matrix operations in an optimized manner. They are specialized cores.</li>
+<li>Even in tensor cores, there are SIMD processors.</li>
+</ul>
+<h3 id="simd-vs-simt-summary">SIMD vs SIMT Summary</h3>
+<p>SIMD (Single Instruction, Multiple Data) and SIMT (Single Instruction, Multiple Threads) architectures both exploit data parallelism but in different ways, leading to distinct limitations and advantages in various computing scenarios.</p>
+<h3 id="limits-of-simd-architecture">Limits of SIMD Architecture</h3>
+<p><a href="19_SIMD.md#disadvantages-of-vector-processors">See here</a></p>
+<h3 id="limits-of-simt-architecture">Limits of SIMT Architecture</h3>
+<ol>
+<li><strong>Thread Divergence:</strong> In SIMT architectures like those in GPUs, thread divergence remains a challenge. When threads within the same warp choose different execution paths due to conditional branching, the GPU must execute each path serially, which diminishes the benefits of parallel execution.</li>
+<li><strong>Resource Contention:</strong> SIMT architectures can suffer from resource contention when multiple threads attempt to access memory or other shared resources simultaneously, leading to potential bottlenecks and reduced performance.</li>
+<li><strong>Complex Memory Hierarchy Management:</strong> SIMT architectures typically involve a complex memory hierarchy including local, shared, and global memory. Efficiently managing data across these memories is crucial for performance but adds to programming complexity.</li>
+<li><strong>Synchronization Costs:</strong> While SIMT allows each thread to execute independently, synchronization mechanisms are necessary to coordinate threads, especially when they need to share data. Implementing synchronization correctly is crucial but can be error-prone and impact performance.</li>
+<li><strong>Software Complexity:</strong> Although SIMT provides more flexibility than SIMD, it still requires careful programming to avoid performance pitfalls such as warp divergence and inefficient memory access patterns. The need to manage execution at the thread level can complicate software design and optimization.</li>
+</ol>
+<h4 id="comparison-and-context">Comparison and Context</h4>
+<p>While SIMD is more restrictive due to its need for uniform operations across all data elements, SIMT provides more flexibility by allowing each thread to execute independently. However, both architectures need careful management of memory access patterns and data alignment to prevent performance degradation. The choice between SIMD and SIMT typically depends on the specific requirements and constraints of the application, as well as the underlying hardware's capabilities.</p>
+<h1 id="21gpuprogramming">21_GPU_PROGRAMMING</h1>
+<blockquote>
+<p>https://www.youtube.com/watch?v=xz9DO-4Pkko</p>
+</blockquote>
+<h2 id="topics">Topics</h2>
+<ul>
+<li>GPU as an accelerator
+<ul>
+<li>Program structure
+<ul>
+<li>Bulk synchronous programming model</li>
+</ul>
+</li>
+<li>Memory hierarchy and memory management</li>
+<li>Performance considerations
+<ul>
+<li>Memory access</li>
+<li>SIMD utilization</li>
+<li>Atomic operations</li>
+<li>Data transfers</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Collaborative computing</li>
+</ul>
+<h2 id="tensor-cores">Tensor cores</h2>
+<ul>
+<li>It's a specialized hardware unit that can perform large numbers of multiplications and additions in parallel (especially for matrix multiplication).</li>
+<li>They are optimized to perform operations on small matrices very quickly.</li>
+<li>Crucial in modern deep learning &amp; neural network training.</li>
+<li>They are not general-purpose, so they can't be used for arbitrary computations.</li>
+<li>Found within NVIDIA's newer GPUs, tensor cores operate alongside traditional CUDA cores</li>
+<li>To utilize tensor cores, software must be specifically written to leverage this hardware, such as CUDA and cuDNN libraries that support operations on these cores.</li>
+<li>They support mixed-precision computing, which allows for the use of both single and half-precision floating points.</li>
+</ul>
+<h2 id="terminology">Terminology</h2>
+<img src="../images/Screenshot 2024-04-26 at 16.39.34.png" alt="Terminology">
+<h2 id="why-cuda-gpus-is-better-than-simd">Why CUDA (GPUs) is better than SIMD</h2>
+<ul>
+<li>As discussed in the <a href="./19_SIMD.md">SIMD section</a>, the main pain point is that SIMD is:
+<ul>
+<li>Not flexible (VLEN required)</li>
+<li>Not easy to program</li>
+</ul>
+</li>
+<li>CUDA allows for a dynamic allocation of resources depending on the workload, enhancing flexibility in programming diverse applications.</li>
+<li>GPUs instead are easier to program due to the SPMD programming model.
+<ul>
+<li>GPUs have democratized High Performance Computing (HPC).</li>
+<li>Greater FLOPS/$, massively parallel chip on a commodity PC (no need of a super computer, you have a power house in your PC).</li>
+</ul>
+</li>
+<li>Many workloads exhibit inherent parallelism
+<ul>
+<li>Matrices</li>
+<li>Image processing</li>
+<li>Deep neural networks</li>
+</ul>
+</li>
+<li>NVIDIA's consistent development and support for CUDA has fostered a robust ecosystem of tools, libraries, and community resources that assist developers in optimizing their applications for GPU execution.</li>
+<li>More scalable than SIMD</li>
+</ul>
+<h3 id="drawbacks">Drawbacks</h3>
+<ul>
+<li>New programming model: new and existing developers must learn to think in parallel terms and adapt traditional serial code to take full advantage of GPU capabilities.</li>
+<li>Algorithms need to be re-implemented and rethought</li>
+<li>Still has some bottlenecks
+<ul>
+<li>CPU-GPU communication (PCIe bus, NVLink)</li>
+<li>DRAM memory bandwidth (GDDR5, GDDR6, HBM2)
+<ul>
+<li>Even though modern gpu's memory bandwidth is very high (300-900 GB/s), it's still a bottleneck and far from the theoretical peak of the GPU.</li>
+<li>The # of cores &amp; how powerful these cores are is higher than the memory bandwidth -&gt; GPUs are more powerful but this ratio is worse than 30 years ago.</li>
+<li>Data layout: inefficient data layouts can lead to poor memory access patterns that exacerbate bandwidth limitations.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Performance optimizations are often hardware-specific, meaning that code optimized for one generation of GPUs may not perform as well on another, requiring ongoing maintenance and updates.</li>
+</ul>
+<h2 id="cpu-vs-gpu">CPU vs GPU</h2>
+<p>Different philosophies:</p>
+<ul>
+<li>CPU: a few <strong>out-of-order</strong> cores</li>
+<li>GPU: Many <strong>in-order</strong> FGMT (Fine Grained MultiThreading)</li>
+</ul>
+<h3 id="cpu">CPU</h3>
+<ul>
+<li>CPUs are designed to minimize latency for a small set of instructions at a time. This design is optimized for general-purpose computing where tasks often have complex dependency chains.</li>
+<li>Out-of-order execution allows CPU cores to execute instructions as soon as the operands are available, rather than adhering to the original program order. This improves the efficiency of instruction pipelines by filling in execution stalls caused by instruction dependencies.
+<ul>
+<li>Requires complex hardware to manage instruction reordering and ensure correct program execution.</li>
+<li>Due to the complexity of out-of-order execution, CPUs have fewer cores (powerful cores) and are optimized for single-threaded performance rather than parallelism.</li>
+</ul>
+</li>
+</ul>
+<h3 id="gpu">GPU</h3>
+<ul>
+<li>Focus on throughput rather than latency. They are optimized for workloads that can be divided into many smaller operations that can be processed simultaneously</li>
+<li>GPU cores generally execute instructions in the order they are received, simplifying the hardware design and allowing for many more cores to be packed onto a single chip.</li>
+<li>To handle the in-order execution without suffering from latency issues, GPUs use fine-grained multithreading. This approach allows each core to switch between multiple threads in a single cycle, thus hiding execution latency caused by long-running operations or memory accesses.</li>
+<li>GPUs contain hundreds to thousands of simpler cores. Smaller cores are more power-efficient and can be packed more densely onto a chip, allowing for massive parallelism.</li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 16.49.11.png" alt="CPU vs GPU">
+<h2 id="gpu-computing">GPU computing</h2>
+<ul>
+<li>Computation is offloaded to the GPU</li>
+<li>3 steps
+<ol>
+<li>CPU-GPU data transfer
+<ul>
+<li>This step involves latency and bandwidth considerations as data moves over PCIe or NVLink connections. The amount of data and the speed of the bus can significantly impact the overall performance of GPU-accelerated applications.</li>
+</ul>
+</li>
+<li>GPU kernel execution
+<ul>
+<li>The performance of the GPU kernel can vary widely based on how well the kernel is optimized for the GPU’s architecture.</li>
+</ul>
+</li>
+<li>GPU-CPU data transfer</li>
+</ol>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 16.51.43.png" alt="GPU computing">
+<ul>
+<li>These days it's more frequent to have SoC (System on a Chip) where the CPU and GPU are on the same chip &amp; have access to the same memory space (e.g. Apple Silicon).
+<ul>
+<li>With shared memory, the CPU and GPU can directly access the same data without needing to copy it between separate memory pools.</li>
+<li>Integrating the CPU and GPU on the same chip improves thermal management and reduces power consumption compared to systems with separate chips.</li>
+<li>Still less powerful than typical discrete GPUs.</li>
+<li>Well-suited for mobile devices and laptops where power efficiency is a priority.</li>
+</ul>
+</li>
+</ul>
+<h3 id="traditional-program-structure">Traditional program structure</h3>
+<ul>
+<li>CPU threads and GPU kernels</li>
+<li>Sequential or modestly parallel code runs on the CPU</li>
+<li>Massive parallelism runs on the GPU</li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 16.54.01.png" alt="Traditional program structure">
+<h4 id="terminology">Terminology</h4>
+<ul>
+<li>Host &lt;-&gt; CPU</li>
+<li>Device &lt;-&gt; GPU</li>
+</ul>
+<h4 id="recall-spmd">Recall: SPMD</h4>
+<blockquote>
+<p>As seen here <a href="20_GPU_ARCHITECTURE.md#spmd-single-program--procedure-multiple-data">SPMD</a></p>
+</blockquote>
+<ul>
+<li>Single procedure/program, multiple data
+<ul>
+<li>This is a programming model rather than a hardware model.</li>
+</ul>
+</li>
+<li>Each processing element executes the same procedure, but on different data.
+<ul>
+<li>Procedures can synchronize and communicate (barriers)</li>
+</ul>
+</li>
+<li>Multiple instructions streams execute the same program
+<ul>
+<li>Each program
+<ol>
+<li>Works on a different part of the data</li>
+<li>Can execute different control flow, at run-time</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="cuda--opencl-programming-model">CUDA / OPENCL Programming Model</h3>
+<ul>
+<li>SIMT or SPMD</li>
+<li>Bulk synchronous programming model
+<ul>
+<li>All threads in a block execute the same instruction at the same time</li>
+<li>All threads in a block are synchronized at the end of each instruction</li>
+<li>All threads in a block can communicate and share data</li>
+<li>Threads in different blocks can't communicate</li>
+<li>Global (coarse-grained) synchronization is possible between kernels</li>
+</ul>
+</li>
+<li>The host (CPU typically) allocates memory, copies data and launches kernels
+<ul>
+<li>Grid: collection of blocks</li>
+<li>Block: collection of threads
+<ul>
+<li>Within a block, shared memory and synchronization</li>
+</ul>
+</li>
+<li>Thread: single execution unit
+<img src="../images/Screenshot 2024-04-26 at 17.28.22.png" alt="Memory hierarchy"></li>
+</ul>
+</li>
+<li>The only way to synchronize threads inside a kernel is by terminating the kernel (global synchronization)
+<ul>
+<li>Inside a block, threads can synchronize using barriers</li>
+<li>Hardware is free to schedule thread blocks and we do not have control over it (the order of execution of blocks is not guaranteed). Even though we know that the scheduling is done with round-robin.</li>
+<li>This is the reason why that all the blocks have finish is by terminating the kernel.</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 17.25.14.png" alt="CUDA / OPENCL Programming Model">
+<h4 id="traditional-program-structure-in-cuda">Traditional program structure in CUDA</h4>
+<ul>
+<li>
+<p>Function prototypes</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">float</span> <span class="hljs-title">serialFunction</span><span class="hljs-params">(...)</span></span>;
+<span class="hljs-function">__global__ <span class="hljs-keyword">void</span> <span class="hljs-title">kernel</span><span class="hljs-params">(...)</span></span>;
+</div></code></pre>
+</li>
+<li>
+<p>Main function</p>
+<ol>
+<li><strong>Allocate memory</strong> space on the device -&gt; <code>cudaMalloc(&amp;d_in, bytes)</code></li>
+<li>Transfer data from <strong>host to device</strong> -&gt; <code>cudaMemCpy(d_in, h_in, bytes, cudaMemcpyHostToDevice)</code></li>
+<li>Execution configuration setup
+<ul>
+<li># of blocks</li>
+<li># of threads per block</li>
+</ul>
+</li>
+<li><strong>Kernel launch</strong> -&gt; <code>kernel&lt;&lt;&lt;numBlocks, numThreadsPerBlock&gt;&gt;&gt;(d_in, d_out)</code></li>
+<li><strong>Transfer data back</strong> from device to host -&gt; <code>cudaMemCpy(h_out, d_out, bytes, cudaMemcpyDeviceToHost)</code></li>
+<li>Repeat as needed*</li>
+</ol>
+</li>
+<li>
+<p>Kernel <code>__global__ void kernel(type args, ...)</code></p>
+<ul>
+<li>To distinguish from host functions</li>
+<li>Automatic variables transparently assigned to registers</li>
+<li>Shared memory: <code>__shared__</code></li>
+<li>Intra-block synchronization: <code>__syncthreads()</code></li>
+</ul>
+</li>
+<li>
+<p>Memory allocation</p>
+<ul>
+<li><code>cudaMalloc(&amp;d_in, bytes)</code></li>
+<li><code>cudaMemCpy(d_in, h_in, bytes, cudaMemcpyHostToDevice)</code></li>
+<li><code>cudaMemCpy(h_out, d_out, bytes, cudaMemcpyDeviceToHost)</code></li>
+<li><code>cudaFree(d_in)</code></li>
+</ul>
+</li>
+<li>
+<p>Kernel launch</p>
+<ul>
+<li><code>kernel&lt;&lt;&lt;numBlocks, numThreadsPerBlock&gt;&gt;&gt;(d_in, d_out)</code></li>
+</ul>
+</li>
+<li>
+<p>Memory deallocation</p>
+<ul>
+<li><code>cudaFree(d_in)</code></li>
+</ul>
+</li>
+<li>
+<p>Explicit synchronization</p>
+<ul>
+<li><code>cudaDeviceSynchronize()</code></li>
+<li>Where do we use it? We use it in the host code right after the kernel call to make sure that the kernel has finished executing. Why? It's the only way to know that the kernel has finished executing. The kernel call is asynchronous, so the host code will continue executing after the kernel call even though the kernel is still executing.</li>
+</ul>
+</li>
+</ul>
+<h4 id="indexing-and-memory-access">Indexing and memory access</h4>
+<ul>
+<li>Images are 2D data structures
+<ul>
+<li>height x width</li>
+<li><code>Image[j][i], where 0&lt;=j&lt;height, 0&lt;=i&lt;width</code>
+<img src="../images/Screenshot 2024-04-26 at 17.45.27.png" alt="Indexing and memory access"></li>
+</ul>
+</li>
+</ul>
+<h5 id="how-is-it-actually-stored-in-memory">How is it actually stored in memory?</h5>
+<ul>
+<li><strong>Row-major layout</strong></li>
+<li><code>Image[j][i]</code> is stored in memory as <code>Image[j*width + i]</code></li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 17.46.44.png" alt="Row-major layout">
+<h4 id="1d-grid-one-way-to-do-it">1D Grid (One way to do it)</h4>
+<ul>
+<li>One GPU thread per pixel</li>
+<li>Grid of blocks of threads
+<ul>
+<li><code>gridDim.x</code> -&gt; # of thread blocks that the grid contains in the x direction</li>
+<li><code>blockDim.x</code> -&gt; # of threads that the block contains in the x direction</li>
+<li><code>blockIdx.x</code> -&gt; index of the block in the grid in the x direction</li>
+<li><code>threadIdx.x</code> -&gt; index of the thread in the block in the x direction</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 17.51.37.png" alt="1D Grid">
+<h4 id="2d-grid-another-way-to-do-it">2D Grid (Another way to do it)</h4>
+<ul>
+<li><code>gridDim.x</code> -&gt; # of thread blocks that the grid contains in the x direction</li>
+<li><code>gridDim.y</code> -&gt; # of thread blocks that the grid contains in the y direction</li>
+</ul>
+<img src="../images/Screenshot 2024-04-26 at 17.55.49.png" alt="2D Grid">
+<h3 id="review-of-gpu-architecture">Review of GPU Architecture</h3>
+<ul>
+<li>
+<p>Introduced in 2007, the Tesla architecture marked a significant step towards GPGPU (General-Purpose computing on Graphics Processing Units). It includes an array of Streaming Processors (SPs) which are essentially small, efficient cores designed to handle multiple threads simultaneously.</p>
+  <img src="../images/Screenshot 2024-04-26 at 18.15.20.png" alt="Review of GPU Architecture SPs">
+</li>
+<li>
+<p>Streaming Multiprocessor (SM)</p>
+<ul>
+<li>Each SM contains several SPs (Streaming Processors) that perform the actual computations. SPs are capable of executing integer and floating-point operations.</li>
+</ul>
+</li>
+<li>
+<p>Blocks are divided into <strong>warps</strong></p>
+<ul>
+<li>SIMD unit (32 threads)</li>
+<li>Uses scoreboarding (internally) to manage the execution of threads</li>
+</ul>
+  <img src="../images/Screenshot 2024-04-26 at 18.16.58.png" alt="Review of GPU Architecture SM (Fermi)">
+</li>
+<li>
+<p>Streaming Multiprocessors (SM) or Compute units (CU): essentially clusters of SIMD pipelines which are organized to optimize parallel processing of data.</p>
+<ul>
+<li>SIMD pipelines</li>
+</ul>
+</li>
+<li>
+<p>Streaming Processors (SP) or CUDA cores: often referred to as vector lanes, these cores are where the computations are carried out. Each core can handle one thread at a time.</p>
+</li>
+<li>
+<p>Number of <strong>SMs x SPs</strong> across generations</p>
+<ul>
+<li><strong>Tesla (2007)</strong>: 30 SMs x 8 SPs per SM</li>
+<li><strong>Fermi (2010)</strong>: 16 SMs x 32 SPs per SM</li>
+<li><strong>Kepler (2012)</strong>: 15 SMs x 192 SPs per SM</li>
+<li><strong>Maxwell (2014)</strong>: 24 SMs x 128 SPs per SM</li>
+<li><strong>Pascal (2016)</strong>: 56 SMs x 64 SPs per SM</li>
+<li><strong>Volta (2017)</strong>: 84 SMs x 64 SPs per SM</li>
+<li><strong>Turing (2018)</strong>: 68 SMs x 64 SPs per SM</li>
+<li><strong>Ampere (2020)</strong>: 108 SMs x 64 SPs per SM</li>
+<li><strong>Hopper (2022)</strong>: 144 SMs x 128 SPs per SM</li>
+<li><strong>Lovelace (2022)</strong>: 144 SMs x 128 SPs per SM</li>
+</ul>
+</li>
+</ul>
+<h3 id="performance-considerations">Performance considerations</h3>
+<ul>
+<li><strong>Main bottlenecks</strong>
+<ul>
+<li><strong>Global memory access</strong> (the main GPU memory) is often a significant bottleneck due to its relatively high latency and limited bandwidth compared to the compute capabilities of the GPU cores.</li>
+<li><strong>CPU-GPU data transfers</strong> over the PCIe bus can substantially affect performance, particularly for applications that require frequent data exchanges.</li>
+</ul>
+</li>
+<li><strong>Memory access</strong>
+<ul>
+<li><strong>Latency hiding</strong>
+<ul>
+<li>Occupancy refers to the number of warps that are active on a multiprocessor at a given time. Higher occupancy can help hide the latency of memory access because while some threads are waiting for data to arrive from memory, others can be executing</li>
+</ul>
+</li>
+<li><strong>Memory coalescing</strong> refers to the optimization technique where adjacent threads access consecutive memory addresses. When memory access is coalesced, multiple data elements can be loaded in a single memory transaction, which reduces the number of required memory accesses and improves bandwidth utilization.</li>
+<li><strong>Data reuse</strong>
+<ul>
+<li><strong>Shared memory usage</strong> can significantly reduce the reliance on slower global memory. Shared memory is much faster but limited in size</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SIMD (Warp) utilization
+<ul>
+<li><strong>Branch divergence</strong> occurs when threads of the same warp follow different execution paths due to conditional statements. This divergence can lead to serialization within the warp, where some threads are idle while others are executing, reducing overall efficiency.</li>
+<li><strong>Memory access patterns</strong>, crucial for maximizing throughput.
+<ul>
+<li>Strided accesses, where threads access memory locations that are spaced apart, can lead to poor utilization of memory bandwidth.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Atomic operations</strong> ensure that a particular memory location is updated atomically, preventing race conditions between threads.
+<ul>
+<li><strong>Avoid them if possible</strong></li>
+<li><strong>Use them sparingly</strong></li>
+<li><strong>Serialization</strong>: two threads trying to write to the same memory location. One must wait for the other to complete, which can serialize the operations and degrade performance.
+<ul>
+<li>Overlap of communication and computation to mitigate the impact of data transfer times.
+<ul>
+<li>Asynchronous data transfers can help overlap communication and computation, allowing the CPU to perform other tasks while the GPU is processing data.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="memory-access---latency-hiding">Memory access - Latency hiding</h4>
+<ul>
+<li><strong>FGMT</strong> (Fine-Grained Multi-Threading) helps to hide the latency of long memory accesses by interleaving the execution of multiple threads or warps. When one warp stalls due to a memory request, another warp can take over the execution unit.</li>
+<li><strong>Occupancy</strong>: It is defined as the ratio of active warps to the maximum number of warps that can be active per Streaming Multiprocessor (SM). Basically how many warps are active at the same time.
+<ul>
+<li><strong>Active warps</strong>: warps that are currently executing and not stalled waiting for resources.</li>
+<li><strong>Maximum warps</strong>: total number of warps that an SM can support at any time.</li>
+<li><strong>Maximum number of blocks per SM</strong>: each can typically support up to 32 blocks.</li>
+<li><strong>Register usage</strong> &amp; <strong>Shared memory usage</strong>: fixed amount of register and shared memory, often around 256KB for registers and 64KB for shared memory in modern architectures.</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 15.38.09.png" alt="Memory access - Latency hiding">
+<h5 id="example">Example</h5>
+<p>Consider a scenario where each thread block in a GPU program requires 30KB of shared memory. Given that the typical shared memory available per SM is 64KB, you can calculate the number of blocks that can fit within one SM:</p>
+<p><strong>Calculation</strong>: Since each block requires 30KB, only two blocks can be accommodated within one SM (2 * 30KB = 60KB &lt; 64KB).
+Crucial because fitting more blocks might exceed the available shared memory, leading to a reduction in occupancy and potential performance degradation.</p>
+<ul>
+<li>Occupancy Calculation
+<ul>
+<li><strong>Number of Threads per Block</strong>: Defined by the programmer, this affects how threads are distributed across warps and blocks.</li>
+<li><strong>Number of Registers per Thread</strong>: Known at compile time, more registers per thread reduce the number of threads (and thus warps) that can be active at any one time.</li>
+<li><strong>Shared Memory per Block</strong>: Also defined by the programmer, this is the amount of shared memory each block requires. High shared memory usage can limit the number of blocks per SM.</li>
+</ul>
+</li>
+</ul>
+<h3 id="memory-access---coalescing">Memory access - Coalescing</h3>
+<ul>
+<li>It involves structuring memory accesses by threads within a warp to ensure that they are as efficient as possible, ideally leading to peak memory bandwidth utilization.</li>
+<li><strong>Peak bandwidth</strong> utilization occurs when all threads in a warp access one cache line</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 15.45.38.png" alt="Memory access - Coalescing">
+<blockquote>
+<p>When threads in a warp access global memory, it is most efficient if they access consecutive memory addresses. This allows the GPU to combine these accesses into a single memory transaction instead of multiple, reducing the number of memory accesses and maximizing bandwidth utilization.</p>
+</blockquote>
+<h4 id="example---uncoalesced-memory-accesses">Example - Uncoalesced memory accesses</h4>
+<p>Threads access memory locations that are not adjacent, leading to multiple memory transactions. This is less efficient and increases the latency of memory operations.</p>
+<img src="../images/Screenshot 2024-04-27 at 15.47.46.png" alt="Uncoalesced memory accesses">
+<blockquote>
+<p>T stands for thread</p>
+<p>Time period stands for Iteration</p>
+</blockquote>
+<p>This causes 4 memory transactions.</p>
+<h4 id="example---coalesced-memory-accesses">Example - Coalesced memory accesses</h4>
+<p>Threads in a warp access one cache line, this results in a single memory transaction, significantly reducing the memory access time and increasing the efficiency of the warp.</p>
+<img src="../images/Screenshot 2024-04-27 at 15.48.57.png" alt="Coalesced memory accesses">
+<blockquote>
+<p>T stands for thread</p>
+<p>Time period stands for Iteration</p>
+</blockquote>
+<p>This causes 1 memory transaction to load the cache line.</p>
+<h4 id="aos-array-of-structures-vs-soa-structure-of-arrays">AoS (Array of Structures) vs SoA (Structure of Arrays)</h4>
+<ul>
+<li><strong>AoS (Array of Structures)</strong>: Commonly preferred in CPU applications due to the locality of reference and data organization that fits well with the CPU cache line structure.</li>
+<li><strong>SoA (Structure of Arrays)</strong>: More advantageous for GPUs as it aligns with the need for memory coalescing. By organizing data into SoA, each thread accesses a contiguous segment of memory, which is optimal for GPUs and helps in maximizing the memory bandwidth.</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 15.58.16.png" alt="AoS vs SoA">
+<img src="../images/Screenshot 2024-04-27 at 16.00.20.png" alt="AoS vs SoA">
+<h3 id="memory-access---data-reuse">Memory access - Data reuse</h3>
+<p>Particularly useful in applications like image processing, where the same data elements are accessed multiple times by different operations or iterations. Optimizing data reuse can significantly reduce the demand on memory bandwidth and improve overall performance.</p>
+<ul>
+<li><strong>Efficient memory use</strong> involves accessing the same memory locations multiple times before discarding them. This is particularly efficient when neighboring threads access overlapping data segments, as in convolutional operations used in image processing and neural networks.</li>
+</ul>
+<h4 id="example">Example</h4>
+<p>Consider a typical filter operation in image processing, such as applying a Gaussian blur. Each pixel's new value is calculated using a combination of its own value and the values of its neighbors.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">3</span>; j++) {
+        sum += gauss[i][j] * Image[(i+row<span class="hljs-number">-1</span>)*width + (j+col<span class="hljs-number">-1</span>)];
+    }
+}
+</div></code></pre>
+<p align="center">
+    <img src="../images/Screenshot 2024-04-27 at 16.06.09.png" alt="Data reuse">
+</p>
+<blockquote>
+<p>Each thread computes a value based on a 3x3 region of the image. As the filter moves across the image, many of these regions will overlap, meaning subsequent operations will reuse some of the same data elements.</p>
+<p>What about the next 9 elements? We're going to access the same 6 elements again. This is data reuse. We do not want again to access the global memory to get the same data, if we can reuse it we can optimize the performance of the program.
+Moving the filter one pixel to the right in a row means six out of the nine pixels in the new filter window are the same as in the previous window.</p>
+</blockquote>
+<h5 id="optimization-techniques-for-data-reuse">Optimization techniques for data reuse</h5>
+<ul>
+<li><strong>Shared Memory Utilization</strong>: Temporarily store data that will be reused in the shared memory of the GPU, which is much faster to access than global memory. This reduces latency and bandwidth usage on repeated accesses.</li>
+<li><strong>Tiling</strong> by breaking down the image or data array into smaller blocks or tiles that fit into shared memory. Process each tile independently while maximizing the reuse of data loaded into the shared memory.</li>
+<li><strong>Plan Access Patterns:</strong> Organize thread access patterns so that threads access shared memory efficiently, avoiding bank conflicts and ensuring coalesced access to global memory when loading and storing data.</li>
+</ul>
+<p align="center">
+    <img src="../images/Screenshot 2024-04-27 at 16.13.42.png" alt="Tiling">
+</p>
+<pre class="hljs"><code><div>__shared__ <span class="hljs-keyword">int</span> l_data[(L_SIZE+<span class="hljs-number">2</span>)*(L_SIZE+<span class="hljs-number">2</span>)];
+<span class="hljs-comment">// ..</span>
+<span class="hljs-comment">// load tile into share memory</span>
+__syncthreads(); <span class="hljs-comment">// make sure that all threads have finished loading the data!</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">3</span>; j++) {
+        sum += gauss[i][j] * l_data[(i+l_row<span class="hljs-number">-1</span>)*(L_SIZE+<span class="hljs-number">2</span>) + (j+l_col<span class="hljs-number">-1</span>)];
+    }
+}
+</div></code></pre>
+<h3 id="shared-memory">Shared memory</h3>
+<ul>
+<li>
+<p>Shared memory also had limits</p>
+</li>
+<li>
+<p>Is organized into multiple memory banks to allow concurrent access by multiple threads</p>
+</li>
+<li>
+<p>Typically, 32 banks in NVIDIA GPUs:</p>
+<ul>
+<li>Successive 32-bit words are stored in successive banks</li>
+<li><code>Bank = Address % 32</code></li>
+<li>In an ideal scenario, each thread in a warp accesses a different bank, allowing all 32 threads to access memory concurrently without any delays.</li>
+</ul>
+</li>
+<li>
+<p><strong>Within-Warp Conflicts:</strong> Bank conflicts occur when multiple threads in the same warp request data from the same memory bank simultaneously. This results in serialization of these memory accesses, degrading performance.</p>
+<ul>
+<li>If each thread accesses a separate bank, there are no conflicts, and access is maximized.</li>
+<li>If N threads access the same bank, they are serialized, effectively reducing the bandwidth by a factor of N.</li>
+</ul>
+</li>
+<li>
+<p>Bank conflicts are only possible within a warp</p>
+<ul>
+<li>No bank conflicts between different warps, why? Because the access to the shared memory is scheduled at different times for different warps, whereas in the same warp, the access can be scheduled at the same time making the threads vulnerable to bank conflicts.</li>
+</ul>
+</li>
+<li>
+<p>Bank conflict free</p>
+  <img src="../images/Screenshot 2024-04-27 at 16.24.59.png" alt="Shared memory">
+</li>
+<li>
+<p>N-way bank conflicts</p>
+  <img src="../images/Screenshot 2024-04-27 at 16.26.10.png" alt="N-way bank conflicts">
+</li>
+</ul>
+<h4 id="reducing-shared-memory-bank-conflicts">Reducing shared memory bank conflicts</h4>
+<ul>
+<li>Bank conflicts are only possible within a warp
+<ul>
+<li>No bank conflicts between different warps. Different warps access shared memory at different scheduled times, thus not conflicting with each other.</li>
+</ul>
+</li>
+<li>If strided accesses are needed, some optimization techniques can help
+<ul>
+<li><strong>Padding</strong>: Altering the data structure to add extra elements can prevent multiple threads from accessing the same bank. This technique is useful when data structures are statically sized and indexed.</li>
+<li><strong>Randomized mapping</strong>: Changing the order of elements in shared memory or using a different addressing scheme can help distribute memory accesses more evenly across the banks.</li>
+<li><strong>Hash functions</strong>: Applying a hash function to compute the address can randomize accesses across banks, reducing the likelihood of conflicts.</li>
+</ul>
+</li>
+</ul>
+<h5 id="drawbacks-of-shared-memory">Drawbacks of shared memory</h5>
+<ul>
+<li>Optimizing shared memory requires a deep understanding of memory access patterns within kernels. Programmers must anticipate how threads will access memory and adjust the data layout or indexing accordingly.</li>
+<li>Effective optimization often requires knowledge about the number of banks and the specifics of the GPU architecture, which might not always be readily available or could change with new GPU generations.</li>
+</ul>
+<h3 id="simd-utilization">SIMD utilization</h3>
+<blockquote>
+<p>Also seen <a href="./20_GPU_ARCHITECTURE.md#conditional-control-flow-instructions">here</a></p>
+</blockquote>
+<p>Efficiency can be compromised by control flow divergence among threads within a warp.</p>
+<ul>
+<li><strong>Branch Divergence</strong> occurs when threads within the same warp need to execute different execution paths based on their data. It leads to serial execution of divergent branches, reducing the effective utilization of GPU resources.</li>
+</ul>
+<p align="center">
+    <img src="../images/Screenshot 2024-04-27 at 16.41.29.png" alt="SIMD utilization">
+</p>
+<blockquote>
+<p>In the image above causes 2 different execution paths, resulting in the twice the number of cycles to execute the code.</p>
+</blockquote>
+<ul>
+<li><strong>Hardware solutions</strong> do exists, some advanced microarchitectures in CPUs mitigate branch divergence using techniques like branch prediction and speculative execution, GPUs typically do not implement these due to their design focused on massive parallelism and throughput.</li>
+<li><strong>Software Approaches</strong> use software in a way that minimizes divergence is key. This involves understanding the common execution paths and structuring code to align with these paths as much as possible.</li>
+</ul>
+<h4 id="example---intra-warp-divergence">Example - Intra warp divergence</h4>
+<p>How threads within a warp can diverge based on simple conditions, leading to different functions being called based on thread indices</p>
+<pre class="hljs"><code><div>Compute(threadIdx.x);
+
+<span class="hljs-keyword">if</span> (threadIdx.x % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>){
+    Do_this(threadIdx.x);
+} <span class="hljs-keyword">else</span> {
+    Do_that((threadIdx.x % <span class="hljs-number">32</span>) * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>);
+}
+</div></code></pre>
+<p align="center">
+    <img src="../images/Screenshot 2024-04-27 at 16.43.35.png" alt="Intra warp divergence">
+</p>
+<h4 id="example---divergence-free-execution">Example - Divergence-free execution</h4>
+<p>In this scenario, if the condition splits threads from different warps, each set of threads can execute concurrently without causing intra-warp divergence, thus maintaining full utilization of the SIMD unit.</p>
+<pre class="hljs"><code><div>Compute(threadIdx.x);
+
+<span class="hljs-keyword">if</span> (threadIdx.x &lt; <span class="hljs-number">32</span>){
+    Do_this(threadIdx.x * <span class="hljs-number">2</span>);
+} <span class="hljs-keyword">else</span> {
+    Do_that((threadIdx.x % <span class="hljs-number">32</span>) * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>);
+}
+</div></code></pre>
+<p align="center">
+    <img src="../images/Screenshot 2024-04-27 at 16.44.56.png" alt="Divergence-free execution">
+</p>
+<blockquote>
+<p>If these conditional branches are handled by separate warps, there is no impact on the utilization within a single warp, ensuring efficient SIMD execution.</p>
+</blockquote>
+<h4 id="vector-reduction">Vector reduction</h4>
+<p>Is a common parallel algorithmic pattern where all elements of an array are combined to produce a single value, such as the sum, minimum, or maximum. Efficiently implementing vector reduction on GPUs can significantly impact the performance of many applications.</p>
+<h5 id="naive-mapping">Naive mapping</h5>
+<p>In this method, threads reduce pairs of elements in multiple steps, where each thread combines two elements and writes back the result. The number of active threads halves in each subsequent iteration, leading to poor SIMD utilization as fewer threads remain active.</p>
+<img src="../images/Screenshot 2024-04-27 at 16.54.01.png" alt="Naive mapping">
+<blockquote>
+<p>This image illustrates how threads become increasingly idle in later iterations, as they have fewer elements to combine.</p>
+</blockquote>
+<pre class="hljs"><code><div>__shared <span class="hljs-keyword">float</span> partialSum[]
+
+<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> t = threadIdx.x;
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> stride = <span class="hljs-number">1</span>; stride &lt; blockDim.x; stride *= <span class="hljs-number">2</span>){
+    __syncthreads();
+
+    <span class="hljs-keyword">if</span> (t % (<span class="hljs-number">2</span>*stride) == <span class="hljs-number">0</span>){
+        partialSum[t] += partialSum[t + stride];
+    }
+}
+</div></code></pre>
+<blockquote>
+<p>This code demonstrates a typical reduction pattern where each thread progressively reduces elements spaced by increasing strides. However, this leads to increasing divergence and underutilization of the GPU's SIMD capabilities.</p>
+</blockquote>
+<h5 id="divergence-free-mapping">Divergence-free mapping</h5>
+<p>To improve SIMD utilization, it is preferable to ensure that all threads in a warp remain active without divergent execution paths. This approach modifies the loop to decrease the range of active threads more gradually and maintains more consistent thread activity.</p>
+<img src="../images/Screenshot 2024-04-27 at 17.10.39.png" alt="Divergence-free mapping">
+<blockquote>
+<p>No 100% SIMD utilization, but better than the naive mapping.</p>
+<p>The code is a little bit more complex, but it's worth it.</p>
+</blockquote>
+<pre class="hljs"><code><div>__shared <span class="hljs-keyword">float</span> partialSum[]
+
+<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> t = threadIdx.x;
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> stride = blockDim.x; stride &gt; <span class="hljs-number">1</span>; stride &gt;&gt; <span class="hljs-number">1</span>) {
+    __syncthreads();
+
+    <span class="hljs-keyword">if</span> (t &lt; stride) {
+        partialSum[t] += partialSum[t + stride];
+    }
+}
+</div></code></pre>
+<blockquote>
+<p>This code snippet uses a more sophisticated approach by halving the stride more smoothly, ensuring that the number of active threads decreases in a more controlled manner. It helps maintain a higher level of thread activity and reduces divergence.</p>
+</blockquote>
+<h3 id="atomic-operations">Atomic operations</h3>
+<p>Atomic operations are crucial for ensuring correct computations when multiple threads need to update the same memory location concurrently. They are widely used in parallel algorithms for tasks such as counting, accumulating sums, or implementing mutexes.</p>
+<ul>
+<li>
+<p>When multiple threads attempt to update the same memory location simultaneously, without atomic operations, data corruption or inconsistencies can occur.</p>
+</li>
+<li>
+<p>CUDA: <code>int atomicAdd(int*, int)</code></p>
+</li>
+<li>
+<p>PTX: <code>atom.shared.add.u32 %r25, [%rd14], %r24</code></p>
+<ul>
+<li>PTX is an intermediate representation of the CUDA code that is generated by the compiler. Useful to ensure continuity of the code between generations of GPUs.</li>
+</ul>
+</li>
+<li>
+<p>SASS: Specific Assembly Code for the particular GPU architecture</p>
+<pre class="hljs"><code><div>; Tesla, Fermi, Kepler architectures
+/*00a0*/ LDSLK P0, R9, [R8];
+/*00a8*/ @P0 IADD R10, R9, R7;
+/*00b0*/ @P0 STSCUL P1, [R8], R10;
+/*00b8*/ @!P0 BRA 0Xa0;
+</div></code></pre>
+<blockquote>
+<p>The above was not very efficient. The atomicAdd where compiled to a load, add, store, and a branch instruction. P0 &amp; P1 (predicate registers) are 1 <strong>bit per thread</strong>, 0 or 1 depending on whether the thread managed to acquire the lock or not. So if 2 threads belonging to the same warp wanted to write to the same memory location, they have to contend for this lock, and only one of them will be able to write to the memory location. The thread that did not manage to acquire the lock would have retried the operation. -&gt; <strong>VERY INEFFICIENT</strong> when multiple threads tried to write to the same memory location.</p>
+</blockquote>
+<blockquote>
+<p>Newer GPU generations introduced more efficient atomic operations that reduce the need for locks and retries, thanks to hardware-level support for atomicity.</p>
+</blockquote>
+<pre class="hljs"><code><div>; Maxwell, Pascal, Volta
+/*01f8*/ ATOMS.ADD RZ, [R7], R11;
+</div></code></pre>
+<blockquote>
+<p>Native atomic operations for 32-bit integer and 32-bit and 64-bit atomicCAS (compare and swap) operations.</p>
+</blockquote>
+</li>
+<li>
+<p><strong>Intra-Warp Conflict Degree</strong> is the number of threads within a warp that try to update the same memory position can significantly impact performance. The conflict degree can range from 1 (no conflict) to 32 (all threads in a warp update the same location).</p>
+</li>
+<li>
+<p><strong>Serialization and Performance:</strong> high conflict degrees lead to serialization of updates, which can severely degrade performance.</p>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 17.44.02.png" alt="Atomic operations">
+<h4 id="histogram-calculation">Histogram calculation</h4>
+<p>Histograms count the number of data instances in disjoint categories (bins)</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> (each pixel i in image I) {
+    Pixel = I[i]               <span class="hljs-comment">// Read pixel</span>
+    Pixel`= Computation(Pixel) <span class="hljs-comment">// Optional computation</span>
+    Histogram[Pixel`]++         <span class="hljs-comment">// Vote in histogram bin</span>
+}
+</div></code></pre>
+<img src="../images/Screenshot 2024-04-27 at 17.48.36.png" alt="Histogram calculation">
+<ul>
+<li>Frequent conflicts in natural images because of the high number of pixels with the same value</li>
+</ul>
+<h5 id="optimizing-the-histogram-calculation">Optimizing the histogram calculation</h5>
+<ul>
+<li><strong>Privatization</strong>: Per-block sub-histograms in shared memory, basically, instead of using global memory, we use shared memory to store the histogram. Each block has its own histogram in shared memory, and at the end, we combine all the histograms from all the blocks.</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 17.55.16.png" alt="Optimizing the histogram calculation">
+<h3 id="data-transfers-between-cpu-and-gpu">Data transfers between CPU and GPU</h3>
+<ul>
+<li>One of the main bottlenecks in GPU computing</li>
+<li>Glued together by the <strong>PCIe bus</strong> or <strong>NVLink</strong>
+<ul>
+<li>These are the primary channels for data transfer between the CPU and GPU. While NVLink offers significantly higher bandwidth than traditional PCIe connections, the bandwidth (ranging from 300 to 900 GB/s) can still be a limiting factor in overall application performance.</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 17.58.47.png" alt="Data transfers between CPU and GPU">
+<h4 id="types-of-data-transfers">Types of Data Transfers</h4>
+<ul>
+<li><strong>Synchronous Transfers</strong>: Operations like <code>cudaMemcpy()</code> block the CPU until the GPU finishes the data transfer. This can lead to inefficiencies if the CPU or GPU has to wait for the other to complete its tasks.</li>
+<li><strong>Asynchronous Transfers</strong>: <code>cudaMemcpyAsync()</code> allows the CPU to continue processing other tasks while the GPU handles the data transfer, potentially overlapping with other GPU operations like kernel execution.</li>
+<li><strong>Streams:</strong> These are sequences of operations that the GPU performs in order. Using multiple streams can greatly enhance the efficiency of data transfers and kernel executions by organizing them into independent sequences that can be processed concurrently.</li>
+</ul>
+<h4 id="asynchronous-data-transfers">Asynchronous data transfers</h4>
+<ul>
+<li>Computation divided into nStreams
+<ul>
+<li>D input data instances, B blocks</li>
+<li>nStreams
+<ul>
+<li>D/nStreams data instances</li>
+<li>B/nStreams blocks</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 18.01.51.png" alt="Asynchronous data transfers">
+<blockquote>
+<p>Not always possible</p>
+</blockquote>
+<ul>
+<li>Estimates
+<ul>
+<li><code>t_e + t_T / nStreams</code>, where <code>t_e &gt;= t_T (dominant kernel)</code></li>
+<li><code>t_T+ t_e / nStreams</code>, where <code>t_T &gt;= t_e (dominant transfers)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Little overhead added in managing the streams, but worth it.</p>
+</blockquote>
+<h5 id="example---video-processing">Example - Video processing</h5>
+<ul>
+<li>Applications with independent computation on different data instances can benefit from asynchronous transfers</li>
+</ul>
+<img src="../images/Screenshot 2024-04-27 at 18.05.06.png" alt="Video processing">
+<h4 id="unified-memory">Unified Memory</h4>
+<ul>
+<li>simplifies memory management by allowing the CPU and GPU to share the same memory space, eliminating the need for explicit data transfers.</li>
+<li>Particularly beneficial in applications where frequent data exchange between the CPU and GPU is necessary. It reduces the overhead of managing separate memory spaces and can lead to simpler and more efficient code.</li>
+</ul>
+<h2 id="summary">Summary</h2>
+<ul>
+<li>GPU as an accelerator
+<ul>
+<li>Program structure
+<ul>
+<li>Bulk synchronous programming model</li>
+</ul>
+</li>
+<li>Memory hierarchy and memory management</li>
+<li>Performance considerations
+<ul>
+<li>Memory access
+<ul>
+<li>Latency hiding: occupancy (TLP)</li>
+<li>Memory coalescing</li>
+<li>Data reuse: shared memory</li>
+</ul>
+</li>
+<li>SIMD utilization</li>
+<li>Atomic operations</li>
+<li>Data transfers</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="collaborative-computing">Collaborative computing</h2>
+<p>Collaborative computing between CPUs and GPUs can be complex due to the fundamentally different architectures and processing capabilities of each.
+However, advancements like Unified Memory and asynchronous kernel launches have significantly improved the synergy between these two components.</p>
+<h3 id="unified-memory">Unified Memory</h3>
+<ul>
+<li>The CPU and GPU share the same memory space. This eliminates the need for manual data transfers and helps manage data consistency automatically.
+<ul>
+<li>Since CUDA 6.0: unified memory</li>
+<li>Since CUDA 8.0 + Pascal architecture: GPU page faults
+<img src="../images/Screenshot 2024-04-27 at 18.19.57.png" alt="Unified Memory"></li>
+</ul>
+</li>
+<li>Easier programming
+<ul>
+<li>Developers no longer need to explicitly copy data between the CPU and GPU. Memory allocation with <code>cudaMallocManaged()</code> automatically ensures that the data is accessible from both the CPU and GPU.</li>
+<li>No need to manage data consistency which reduces the risk of errors and simplifies the code.</li>
+</ul>
+</li>
+</ul>
+<h4 id="asynchronous-kernel-launches">Asynchronous kernel launches</h4>
+<ul>
+<li><strong>Non-Blocking Computations</strong>: Kernel launches are asynchronous, meaning the CPU can perform other tasks while the GPU is processing. This allows for more efficient use of system resources.</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-comment">// allocate input</span>
+<span class="hljs-built_in">malloc</span>(input, ...);
+cudaMallocManaged(&amp;d_input, ...);
+<span class="hljs-built_in">memcpy</span>(d_input, input, ...);
+
+<span class="hljs-comment">// allocate output</span>
+<span class="hljs-built_in">malloc</span>(output, ...);
+cudaMallocManaged(&amp;d_output, ...);
+
+<span class="hljs-comment">// launch kernel</span>
+gpu_kernel&lt;&lt;&lt;...&gt;&gt;&gt;(d_input, d_output);
+
+<span class="hljs-comment">// CPU can do things here!</span>
+
+<span class="hljs-comment">// sync</span>
+cudaDeviceSynchronize();
+
+<span class="hljs-comment">// copy output to host memory</span>
+cudaMemcpy(output, d_output, ...);
+</div></code></pre>
+<h4 id="fine-grained-heterogeneity">Fine-grained heterogeneity</h4>
+<p>With architectures like Pascal and Volta, more sophisticated features such as</p>
+<ul>
+<li><strong>CPU-GPU memory coherence</strong> which means that if the GPU updates a memory location, the change is immediately visible to the CPU and vice versa, without the need for explicit synchronization commands.</li>
+<li><strong>System-wide atomics</strong> are supported which extend the concept of atomic operations to work across the entire system, meaning that these operations can be performed with consistency and atomicity no matter whether they are initiated by the CPU or the GPU.</li>
+</ul>
+<p>Allows for fine-grained control over how data is accessed and modified, enhancing the capabilities for collaborative computing.</p>
+<ul>
+<li><strong>Reduced Complexity</strong> so that developers no longer need to implement complex data transfer and synchronization mechanisms in their applications, simplifying code and reducing potential bugs.</li>
+<li><strong>Performance Enhancements</strong> by reducing the need for data transfers and manual synchronization can significantly speed up applications, particularly those involving frequent interactions between the CPU and GPU.</li>
+<li><strong>Enhanced Flexibility</strong> so that applications can more dynamically distribute tasks between the CPU and GPU based on their respective strengths and current load.</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-comment">// allocate input</span>
+cudaMallocManaged(&amp;d_input, ...);
+
+<span class="hljs-comment">// allocate output</span>
+cudaMallocManaged(&amp;d_output, ...);
+
+<span class="hljs-comment">// launch kernel</span>
+gpu_kernel&lt;&lt;&lt;...&gt;&gt;&gt;(d_input, d_output);
+
+<span class="hljs-comment">// CPU can do things here!</span>
+output[x] = input[y];
+
+output[x+<span class="hljs-number">1</span>].fetch_add(<span class="hljs-number">1</span>);
+</div></code></pre>
+<blockquote>
+<p>Since CUDA 8.0</p>
+<ul>
+<li>Unified memory <code>cudaMallocManaged(&amp;h_in, in_size)</code></li>
+<li>System-wide atomics <code>old = atomicAdd_system(&amp;h_out[x], inc)</code></li>
+</ul>
+</blockquote>
+<h3 id="collaborative-patterns">Collaborative patterns</h3>
+<img src="../images/Screenshot 2024-04-27 at 18.30.48.png" alt="Collaborative patterns">
+<img src="../images/Screenshot 2024-04-27 at 18.35.20.png" alt="Collaborative patterns">
+<h1 id="22cuda">22_CUDA</h1>
+<blockquote>
+<p>https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html</p>
+</blockquote>
+<h2 id="why-gpus">Why GPUs?</h2>
+<ul>
+<li>GPUs are designed to have a high throughput for parallel workloads.</li>
+<li>While the CPU is designed to excel at executing a sequence of operations, called a thread, as fast as possible and can execute a few tens of these threads in parallel, the GPU is designed to excel at executing thousands of them in parallel (amortizing the slower single-thread performance to achieve greater throughput).</li>
+<li>The GPU is specialized for highly parallel computations and therefore designed such that more transistors are devoted to data processing rather than data caching and flow control</li>
+</ul>
+<img src="../images/Screenshot 2024-04-29 at 19.31.21.png" alt="CPU vs GPU" />
+<ul>
+<li>More FP computations -&gt; higher throughput for parallel workloads</li>
+<li>GPU can hide memory access latencies with computation, instead of relying on large data caches and complex flow control to avoid long memory access latencies, both of which are expensive in terms of transistors.</li>
+<li>The GPU and CPU are designed to work together to provide the best performance for a wide range of applications.</li>
+<li>Applications are a mix of serial and parallel workloads</li>
+</ul>
+<h2 id="cuda-compute-unified-device-architecture">CUDA (Compute Unified Device Architecture)</h2>
+<ul>
+<li>General purpose parallel computing platform and programming model that leverages the parallel compute engine in NVIDIA GPUs to solve complex computational problems.</li>
+<li>C/C++ extension</li>
+</ul>
+<h3 id="cuda-programming-model">CUDA Programming Model</h3>
+<ul>
+<li>Since is an extension of C/C++, it is easy to learn</li>
+<li>At its core it exposes the following to programmers:
+<ul>
+<li>Hierarchical thread hierarchy</li>
+<li>Shared memory</li>
+<li>Barrier synchronization</li>
+</ul>
+</li>
+<li>The abstractions provide fine-grained data parallelism and thread parallelism, nested within coarse-grained data parallelism and task parallelism.</li>
+<li>The programming model guides the programmer to partition the problem into coarse sub-problems that can be solved independently in parallel by blocks of threads, and each sub-problem into finer pieces that can solved cooperatively by the threads in the block.</li>
+</ul>
+<img src="../images/Screenshot 2024-04-29 at 19.39.28.png" alt="CUDA Programming Model" />
+<h4 id="kernels">Kernels</h4>
+<ul>
+<li>Kernels are simply functions that are executed on the GPU.</li>
+<li>When called are executed N times in parallel by N different CUDA threads, as opposed to only once like a regular C/C++ function.</li>
+<li>Each thread that exectues the kernel is given a unique threadID that is accessible within the kernel code.</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-comment">// Kernel definition</span>
+<span class="hljs-function">__global__ <span class="hljs-keyword">void</span> <span class="hljs-title">VecAdd</span><span class="hljs-params">(<span class="hljs-keyword">float</span>* A, <span class="hljs-keyword">float</span>* B, <span class="hljs-keyword">float</span>* C)</span>
+</span>{
+    <span class="hljs-keyword">int</span> i = threadIdx.x;
+    C[i] = A[i] + B[i];
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    ...
+    <span class="hljs-comment">// Kernel invocation with N threads</span>
+    VecAdd&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(A, B, C);
+    ...
+}
+</div></code></pre>
+<blockquote>
+<p>As an illustration, the following sample code, using the built-in variable threadIdx, adds two vectors A and B of size N and stores the result into vector C:</p>
+<p>A kernel is defined using the <strong>global</strong> declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new &lt;&lt;&lt;...&gt;&gt;&gt;execution configuration syntax</p>
+</blockquote>
+<h4 id="thread-hierarchy">Thread Hierarchy</h4>
+<pre class="hljs"><code><div><span class="hljs-function">__global__ <span class="hljs-keyword">void</span> <span class="hljs-title">MatAdd</span><span class="hljs-params">(<span class="hljs-keyword">float</span> A[N][N], <span class="hljs-keyword">float</span> B[N][N],
+                       <span class="hljs-keyword">float</span> C[N][N])</span>
+</span>{
+    <span class="hljs-keyword">int</span> i = threadIdx.x;
+    <span class="hljs-keyword">int</span> j = threadIdx.y;
+    C[i][j] = A[i][j] + B[i][j];
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    ...
+    <span class="hljs-comment">// Kernel invocation with one block of N * N * 1 threads</span>
+    <span class="hljs-keyword">int</span> numBlocks = <span class="hljs-number">1</span>;
+    <span class="hljs-function">dim3 <span class="hljs-title">threadsPerBlock</span><span class="hljs-params">(N, N)</span></span>;
+    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);
+    ...
+}
+</div></code></pre>
+<ul>
+<li>The index of a thread and its thread ID relate to each other in a straightforward way:
+<ul>
+<li>one-dimensional blocks are laid out in a single line</li>
+<li>two-dimensional blocks are laid out in a grid (Dx, Dy), where the thread ID of a thread of index <code>(x, y)</code> is <code>x + y * Dx</code></li>
+<li>three-dimensional blocks are laid out in a 3D grid (Dx, Dy, Dz), where the thread ID of a thread of index <code>(x, y, z)</code> is <code>x + y * Dx + z * Dx * Dy</code></li>
+</ul>
+</li>
+<li>There's a limit to the number of threads per block, all threads of a block are executed on the same SM, and all threads of a block can communicate with each other through shared memory.</li>
+<li>A thread block may contain up to 1024 threads</li>
+<li>A kernel can be executed by multiple equally-sized thread blocks</li>
+</ul>
+<img src="../images/grid-of-thread-blocks.png" alt="Thread Hierarchy" />
+<ul>
+<li>
+<p>Thread blocks are required to execute independently: It must be possible to execute them in any order, in parallel or in series.</p>
+</li>
+<li>
+<p>Threads within a block can cooperate through shared memory, and threads within a grid can cooperate through global memory.</p>
+</li>
+<li>
+<p>The synchronization barrier <code>__syncthreads()</code> can be used to synchronize threads within the same block.</p>
+</li>
+<li>
+<p>When using the function, all threads within the block must reach the same point in the code before any is allowed to proceed.</p>
+</li>
+</ul>
+<h4 id="memory-hierarchy">Memory Hierarchy</h4>
+<ul>
+<li>Each thread has a private local memory</li>
+<li>Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block</li>
+<li>All threads have access to the same global memory</li>
+</ul>
+<img src="../images/memory-hierarchy (1).png" alt="Memory Hierarchy" />
+<h4 id="heterogeneous-programming">Heterogeneous Programming</h4>
+<ul>
+<li>Modern applications are a mix of serial and parallel workloads</li>
+<li>The CPU is good at serial workloads</li>
+<li>The GPU is good at parallel workloads</li>
+<li>Each retain their own separate memory spaces in DRAM, referred to as the host memory and device memory, respectively</li>
+</ul>
+<img src="../images/heterogeneous-programming.png" alt="Heterogeneous Programming" />
+<blockquote>
+<p>Serial code executes on the host (CPU) and parallel code executes on the device (GPU)</p>
+</blockquote>
+<h5 id="unified-memory">Unified memory</h5>
+<ul>
+<li>
+<p>Introduced in CUDA 6</p>
+</li>
+<li>
+<p>Allows the CPU and GPU to access the same virtual memory space</p>
+</li>
+<li>
+<p>Simplifies memory management and reduces the need to explicitly copy data between the CPU and GPU</p>
+</li>
+<li>
+<p>Basically a single pointer value enables all processors in the system (all CPUs, all GPUs) to access this memory with all of their native memory access instructions</p>
+</li>
+<li>
+<p>Pros:</p>
+<ul>
+<li>Simplifies memory management</li>
+<li><strong>Productivity</strong>: Easier to write correct code. GPU programs may access Unified Memory from GPU and CPU threads concurrently without needing to create separate allocations (<code>cudaMalloc()</code>) and copy memory manually back and forth (<code>cudaMemcpy*()</code>).</li>
+<li><strong>Performance</strong>:
+<ul>
+<li>Data access speed may be maximized by migrating data towards processors that access it most frequently</li>
+<li>Total system memory may be reduced by avoiding duplicating memory on both CPUs and GPUs</li>
+</ul>
+</li>
+<li><strong>Functionality</strong>: enables GPU programs to work on data that exceeds the GPU memory capacity</li>
+</ul>
+</li>
+<li>
+<p>Data movement still takes place</p>
+</li>
+</ul>
+<h3 id="asynchronous-simt-programming-model">Asynchronous SIMT Programming Model</h3>
+<ul>
+<li>The SIMT (Single Instruction, Multiple Thread) programming model is a key feature of CUDA.</li>
+<li>A thread is the lowest level of abstraction for ding a computation or a memory operation.</li>
+<li>The asynchronous programming model defines the behavior of asynchronous operations in CUDA threads</li>
+</ul>
+<h4 id="asynchronous-operations">Asynchronous Operations</h4>
+<ul>
+<li>An asynchronous operation is defined as an operation that is initiated by a CUDA thread and is executed asynchronously as-if by another thread.</li>
+<li>The CUDA thread that initiated the operation may continue to execute other operations while the asynchronous operation is being executed.</li>
+<li>An asynchronous operation uses a synchronization object to synchronize the completion of the operation</li>
+</ul>
+<h3 id="cuda-programming-interface">CUDA Programming Interface</h3>
+<ul>
+<li>The CUDA programming interface consists of a set of host functions and device functions.</li>
+<li>The compilation is do with the <code>nvcc</code> compiler driver</li>
+<li>The CUDA runtime API provides a simple interface for C and C++ functions that can be called from the host that manage the allocation, deallocation, and transfer of data between the host and the device.</li>
+<li>The runtime is built on top of a lower-level C API</li>
+</ul>
+<h4 id="compilation-with-nvcc">Compilation with NVCC</h4>
+<ul>
+<li>Kernels can be directly written in PTX (Parallel Thread Execution) assembly language, as a programmer would write directly assembly code for a CPU</li>
+<li>It is instead more common to write kernels in C/C++ and let the compiler generate the PTX code</li>
+<li>After the PTX code is generated, it is compiled to machine code by the PTX compiler named SASS which is architecture-specific</li>
+</ul>
+<h4 id="workflow">Workflow</h4>
+<ul>
+<li>Source files compiled with nvcc can include both host and device code</li>
+<li>nvcc separates the host code from the device code and compiles each separately
+<ul>
+<li>Host code is compiled to object code by the host compiler</li>
+<li>Device code is compiled to PTX code by the device compiler</li>
+</ul>
+</li>
+</ul>
+<h4 id="cuda-runtime">CUDA runtime</h4>
+<ul>
+<li>The runtime is implemented in a shared library that is linked with the application at runtime</li>
+<li>All entry points are prefixed with <code>cuda</code></li>
+</ul>
+
+</body>
+</html>

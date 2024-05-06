@@ -2,6 +2,45 @@
 
 > https://www.youtube.com/watch?v=UFD8K-lprbQ
 
+- [20\_GPU architecture](#20_gpu-architecture)
+  - [Overview of GPU Architecture](#overview-of-gpu-architecture)
+  - [Limits of SIMD](#limits-of-simd)
+  - [Performance Considerations](#performance-considerations)
+  - [Historical Context: Intel Pentium MMX](#historical-context-intel-pentium-mmx)
+    - [Intel Pentium MMX operations - 90s](#intel-pentium-mmx-operations---90s)
+  - [Deep Dive into GPUs](#deep-dive-into-gpus)
+    - [What are threads in GPU terminology?](#what-are-threads-in-gpu-terminology)
+    - [Programming Model vs. Execution Model](#programming-model-vs-execution-model)
+    - [GPUs as SIMD Machines](#gpus-as-simd-machines)
+    - [What are WARPs?](#what-are-warps)
+      - [Example: SPMD on SIMT machine](#example-spmd-on-simt-machine)
+      - [How do they operate](#how-do-they-operate)
+    - [Warp and Thread Management:](#warp-and-thread-management)
+    - [SIMD vs SIMT Execution Model](#simd-vs-simt-execution-model)
+    - [Advantages of SIMT](#advantages-of-simt)
+    - [Fine-grained Multi-threading of Warps](#fine-grained-multi-threading-of-warps)
+    - [High-level Overview of GPU Architecture](#high-level-overview-of-gpu-architecture)
+    - [GPU vs. CPU](#gpu-vs-cpu)
+    - [SIMD vs SIMT](#simd-vs-simt)
+      - [Warp Instruction Level Parallelism](#warp-instruction-level-parallelism)
+      - [Memory Access in GPU Architecture](#memory-access-in-gpu-architecture)
+    - [Warp Exposure to Programmers](#warp-exposure-to-programmers)
+      - [From Blocks to Warps in GPUs](#from-blocks-to-warps-in-gpus)
+      - [Warp-based SIMD vs. Traditional SIMD](#warp-based-simd-vs-traditional-simd)
+    - [SPMD: Single Program (/ Procedure) Multiple Data](#spmd-single-program--procedure-multiple-data)
+    - [Flexibility of SIMT in Grouping Threads into Warps](#flexibility-of-simt-in-grouping-threads-into-warps)
+      - [Conditional control flow instructions](#conditional-control-flow-instructions)
+      - [Control flow problem in GPUs / SIMT](#control-flow-problem-in-gpus--simt)
+      - [Dynamic Warp Formation / Merging](#dynamic-warp-formation--merging)
+    - [When are GPUs not efficient?](#when-are-gpus-not-efficient)
+      - [Example of a GPU - NVIDIA GeForce GTX 285](#example-of-a-gpu---nvidia-geforce-gtx-285)
+      - [Tensor Cores](#tensor-cores)
+    - [SIMD vs SIMT Summary](#simd-vs-simt-summary)
+    - [Limits of SIMD Architecture](#limits-of-simd-architecture)
+    - [Limits of SIMT Architecture](#limits-of-simt-architecture)
+      - [Comparison and Context](#comparison-and-context)
+
+
 ## Overview of GPU Architecture
 - GPUs are both vector processors and array processors, a mix of the two. Both types fall under the SIMD (Single Instruction Multiple Data) category.
 - **Memory banking** is the division of memory into multiple units to allow more simultaneous data access.

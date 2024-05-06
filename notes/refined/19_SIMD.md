@@ -2,6 +2,38 @@
 
 > https://www.youtube.com/watch?v=gkMaO3yJMz0
 
+- [19\_SIMD architecture](#19_simd-architecture)
+    - [SIMD vs Out-of-Order Execution:](#simd-vs-out-of-order-execution)
+      - [SIMD](#simd)
+      - [Out-of-Order Execution](#out-of-order-execution)
+      - [Comparison](#comparison)
+      - [Data Processing in SIMD Architectures:](#data-processing-in-simd-architectures)
+      - [Example of Operational Differences:](#example-of-operational-differences)
+    - [Vector Stride and Pipeline:](#vector-stride-and-pipeline)
+      - [Advantages of Vector Processors:](#advantages-of-vector-processors)
+      - [Disadvantages of Vector Processors:](#disadvantages-of-vector-processors)
+    - [Amdahl's Law](#amdahls-law)
+    - [Vector Registers and Functional Units:](#vector-registers-and-functional-units)
+      - [Loading / Storing vectors from \& to memory](#loading--storing-vectors-from--to-memory)
+        - [How do we achieve this with a memory that takes more than 1 cycle to access?](#how-do-we-achieve-this-with-a-memory-that-takes-more-than-1-cycle-to-access)
+      - [Memory banking](#memory-banking)
+        - [An example](#an-example)
+    - [Vector Chaining](#vector-chaining)
+    - [Vector stripmining](#vector-stripmining)
+    - [Gather / Scatter operations](#gather--scatter-operations)
+      - [Gather example](#gather-example)
+      - [Scatter example](#scatter-example)
+    - [Conditional operations](#conditional-operations)
+      - [1 Example](#1-example)
+      - [2 Example](#2-example)
+      - [Implementation of masked operations](#implementation-of-masked-operations)
+      - [Simple](#simple)
+      - [Density-Time](#density-time)
+    - [Array vs Vector processors, again](#array-vs-vector-processors-again)
+      - [Vector instruction level parallelism](#vector-instruction-level-parallelism)
+    - [In summary](#in-summary)
+
+
 *   **SIMD (Single Instruction, Multiple Data)** architecture is a type of parallel computing architecture that performs the same operation on multiple data points simultaneously.
 *   In a SIMD architecture, multiple processing elements execute the same operation on different pieces of data at the same time, thereby achieving data-level parallelism.
 *   Two common forms of SIMD architectures are **vector processors** and **array processors**.

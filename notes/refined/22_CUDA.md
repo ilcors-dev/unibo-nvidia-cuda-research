@@ -2,6 +2,22 @@
 
 > https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
 
+- [22\_CUDA](#22_cuda)
+  - [Why GPUs?](#why-gpus)
+  - [CUDA (Compute Unified Device Architecture)](#cuda-compute-unified-device-architecture)
+    - [CUDA Programming Model](#cuda-programming-model)
+      - [Kernels](#kernels)
+      - [Thread Hierarchy](#thread-hierarchy)
+      - [Memory Hierarchy](#memory-hierarchy)
+      - [Heterogeneous Programming](#heterogeneous-programming)
+        - [Unified memory](#unified-memory)
+    - [Asynchronous SIMT Programming Model](#asynchronous-simt-programming-model)
+      - [Asynchronous Operations](#asynchronous-operations)
+    - [CUDA Programming Interface](#cuda-programming-interface)
+      - [Compilation with NVCC](#compilation-with-nvcc)
+      - [Workflow](#workflow)
+      - [CUDA runtime](#cuda-runtime)
+
 ## Why GPUs?
 - GPUs are designed to have a high throughput for parallel workloads.
 - While the CPU is designed to excel at executing a sequence of operations, called a thread, as fast as possible and can execute a few tens of these threads in parallel, the GPU is designed to excel at executing thousands of them in parallel (amortizing the slower single-thread performance to achieve greater throughput).
