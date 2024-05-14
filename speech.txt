@@ -1,0 +1,117 @@
+NVIDIA CUDA SPEECH
+
+
+1. INIZIO
+2. Ho scelto questo approfondimento perché nella mia carriera accademica non ho mai avuto modo di studiare le gpu e di
+come si programmano in particolareE soprattutto, dato il periodo storico, perché si parla spesso del loro ruolo
+fondamentale in questo momento storico di boom per l’intelligenza artificiale?
+3. Che cos’è CUDA? CUDA è l’acronimo di Compute Unified Device Architecture, è un estensione del linguaggio C/C++ e
+permette agli sviluppatori di eseguire programmi sulle GPU e di sfruttarne le potenzialità in termini di throughput.Oggi
+le GPU non si limitano ad essere utilizzate solo per la grafica, ma sono usate ad esempio in applicazioni scientifiche,
+nel deep learning. CUDA è quel layer intermedio che permette agli sviluppatori di programmare una GPU per algoritmi
+tipicamente destinati alle CPU, aprendo le porte al GPGPU (General-purpose computing on graphics processing)
+4. Prima di entrare nel dettaglio di CUDA è necessario però avere un’idea di come le GPU funzionano a livello
+architetturale.Le GPU sono essenzialmente delle macchine SIMD-like, composte da molti core che eseguono istruzioni
+in-order, cioè nell’ordine in cui sono specificate nel programma
+5. Ma cos’è SIMD? SIMD è una tipologia di parallel processing delle istruzioni che consiste nell’eseguire la stessa
+operazione su più dati distinti nello stesso momento sfruttando il cosiddetto DLP (Data Level Parallelism).Durante il
+corso abbiamo studiato un’altro tipo di approccio al parallelismo applicato alle CPU, chiamato ILP (instruction level
+parallelism). Il requisito fondamentale del DLP è che i dati non siano dipendenti tra loro e quindi si possa evitare di
+implementare una logica per il check dipendenze che ad esempio sono presenti nelle cpu, risparmiando così area di
+silicio che possono essere sfruttati in altro modo.Si possono distinguere due tipi di processori che implementano
+l’approccio SIMD:- array processors- vector processors
+6. La differenza principale tra questi due processori risiede sulla modalità di esecuzione delle istruzioni, in
+particolare gli array processors replicano le unità funzionali ed eseguono la stessa istruzione nello stesso istante su
+ciascuna di queste mentre i vector processor funzionano più come una pipeline in cui le istruzioni vengono eseguite in
+step in instanti di tempo diversi sullo stesso processore.Di fatto questa è una distinzione da puristi, nella realtà le
+GPU sono un mix di questi due
+7. In questo esempio abbiamo un’architettura in grado di gestire 32 elementi simultanei a 8 linee
+8. Tra i vantaggi di SIMD troviamo:+ l’efficienza energetica: meno cicli di fetch & decode, meno istruzioni di branch,
+meno idle time+ più istruzioni nello stesso ciclo di clock e quindi un maggiore throughput+ no hardware per il check
+sulle dipendenze sui dati, meno area di silicio utilizzataD’altra parte invece- la necessità di dover ripensare e
+riprogrammare gli algoritmi in funzione della specifica architettura -> sono difficili da programmare- funzionano solo
+se i dati sono dependency free- molto inefficienti se i dati non sono regolari in memoria (access patterns)
+9. Nelle GPU, il concetto di SIMD viene astratto attraverso un’altro modello chiamato SIMT (single instruction multiple
+thread) dove le istruzioni sono eseguite su dei THREAD, che rappresentano la più piccola unità logica che può essere
+eseguita su una GPU, non sono core fisici. Ogni thread è una sequenza di istruzioni che opera su dati diversi che la GPU
+può eseguire in maniera parallela sui propri core. La differenza con SIMD è che in questo modello lo sviluppatore non
+deve gestire manualmente la vettorizzazione dei dati ma può continuare a scrivere codice in modo sequenziale senza
+preoccuparsi di quello che succede a livello hardware.La GPU a livello hardware raggruppa i thread in blocchi da 32
+WARPs che eseguono la stessa istruzione nello stesso momento, condividendo di fatto lo stesso program counter
+10. Ad esempio, il concetto di warp è visualizzato qui come uno stack di WARP che vengono eseguiti in una pipeline SIMD
+11. Forse da togliere
+12. La stessa immagine che abbiamo visto in precedenza per SIMD, può essere adattata per il modello SIMT dove al posto
+dell’issuing delle singole istruzioni abbiamo l’issuing di WARPs
+13. Qui possiamo vedere come l’esecuzione dei thread può essere divisa in una o più pipeline differenti
+14. Ma dove vengono effettivamente eseguiti questi thread? Qui possiamo vedere l’architettura Fermi, introdotta nel 2008
+da Nvidia in cui possono essere riconosciuti una cache L2, 4 GPC (Graphics Processing Cluster) al cui interno possiamo
+trovare 4 Streaming MultiProcessors, il cui scopo è gestire i warp e schedulare l’esecuzione delle istruzioni. Ogni
+Streaming Multiprocessor è composto da 16 Streaming Processors, che sono l’effettivo motore motore della GPU, sui quali
+vengono eseguiti i threads. Si possono anche notare un Register File da 32KB e 64KB di L1 cache. Gli streaming
+processors sono anche chiamati CUDA cores
+15. Mettendo a confronto uno schema, molto semplificato, di una CPU & di un GPU possiamo notare queste essenziali
+differenze: le CPU hanno pochi, ma molto potenti, core in grado di eseguire le istruzioni in a out-of-order fashion
+mentre le GPU hanno molti più core, meno potenti e semplici che eseguono le istruzioni in-order. Le CPU sono pensate per
+eseguire programmi ed algoritmi general purpose, mentre le gpu sono limitate in questo aspetto, sono più adatte ad
+algoritmi che risultano essere facilmente parallelizzabili dove i dati non sono dipendenti tra di loro. CPU e GPU
+collaborano insieme durante l’esecuzione di un programma dove le parti più adatte ad essere eseguite sulla gpu vengono
+‘scaricate’ su di essa per migliorare e velocizzare l’esecuzione dell’applicazione.
+16. Quindi, avendo capito a grandi linee come funziona una gpu, possiamo finalmente arrivare a parlare di come possiamo
+eseguire dei programmi su di essa. Per prima cosa è bene chiarire la terminologia, in particolare in CUDA le CPU sono
+chiamate HOST, mentre le GPU device. Notare che un sistema può essere dotato di N device e di M CPU.Come avviene l’avvio
+di un’esecuzione su di un device? In sostanza si ha che la CPU per prima cosa copia i dati necessari all’esecuzione
+nella memoria della GPU, lancia l’esecuzione sulla GPU che una volta terminata copia il risultato verso la memoria della
+cpu.
+17. In CUDA, è necessario distinguere e capire 3 concetti principali: - il primo, che abbiamo già visto sono i thread,
+che sono la più piccola unità logica che la gpu gestisce ed esegue all’interno dei cuda core- poi abbiamo i blocks, che
+non sono altro che un raggruppamento di thread a livello software da non confondere con i warp che rappresentano
+l’implementazione hardware. A livello hardware questi possono essere visti come un’astrazione degli Streaming
+Multiprocessor, i quali schedulano l’esecuzione dei propri thread i quali hanno accesso alla stessa memoria condivisa-
+ed infine le grids che rappresentano una collezione di blocks, distribuiti su molteplici Streaming Multiprocessors
+18. Immagine che descrive quanto detto sopra
+19. Qui abbiamo un po’ di funzioni di base che CUDA espone al programmatore,- troviamo ad esempio la definizione
+fondamentale di kernel, che non rappresenta altro che una funzione eseguita sulla GPU- la malloc per copiare allocare
+memoria sulla gpu- cudaMemCpy per la copia dei dati dalla cpu alla gpu e viceversa- come si lancia un kernel su una GPU-
+come si libera memoria dalla GPU- e come è possibile sincronizzare i thread in esecuzione
+20. Come fa il programmatore ad accedere ad un determinato thread in esecuzione? Come vengono allocati in memoria i
+thread? Ci sono essenzialmente 3 modi diversi che il programmatore può scegliere: 1D (vettore), 2D (matrice) e 3D. A
+seconda della disposizione dei thread in memoria ogni thread può essere acceduto attraverso l’uso di queste variabili
+disponibili che rappresentano la posizione del thread nel block, del block nella grid, quanti thread sono disponibili in
+ogni block in ogni direzione e quanti blocks sono disponibili in ogni griglia in ogni direzione
+21. La rappresentazione a una dimensione è la più semplice, dove i dati sono disposti in row-major layout e ogni thread
+viene acceduto tramite in questo modo
+22. La rappresentazione a Matrice invece è un pochino più complessa x
+23. Un concetto importante per le performance dei programmi CUDA è capire organizzare i dati in memoria in modo tale che
+la GPU possa eseguire nel modo più efficiente possibile. Questo concetto viene chiamato coalescing, sopra abbiamo un
+esempio di accesso not coalesced dove i dati sono organizzati in row major. L’accesso non è ottimizzato perchè i thread,
+nella stessa esecuzione non accedono a dati contigui perciò non è possibile per la GPU prelevare, in uno scenario
+ipotetico, i dati necessari in un unico accesso alla memoria introducendo quindi latenza nell’operazione.Nell’immagine
+sotto invece i dati sono organizzati in column-major e la GPU è in grado di leggere i dati in un’unica transazione verso
+la memoria. Questo accesso è altamente ottimizzato e viene detto coalesced memory access
+24. Il concetto di latency hiding invece è una proprietà derivata dal modello SIMT, in cui lo scheduler della GPU in
+ogni streaming processor può effettuare lo switch di contesto dei warp che per un determinato motivo sono in attesa e
+rimpiazzarli invece con un warp libero di eseguire portando così la gpu ad avere una migliore occupazione, definita come
+il rapporto tra i warp attivi e il numero massimo di warp eseguibili sullo streaming multiprocessor
+25. Come vengono gestiti i branch nel codice? Abbiamo visto che l’architettura SIMD riduce la necessità delle istruzioni
+condizionali, senza però ridurle del tutto. In caso di branch, ogni thread all’interno di un warp può prendere ‘path’
+diversi creando la cosiddetta intrawrap-divergence riducendo così l’efficienza generale della gpu. La risoluzione a
+questo problema è lasciata al programmatore, infatti è compito suo definire in modo appropriato i branch in modo che non
+si verifichi l’intrawarp-divergence
+26. In questo esempio, il primo blocco di codice a sinistra mostra una gestione dei branch non ottimizzata mentre quello
+a destra permette 32 thread, ovvero un intero warp, di eseguire una strada piuttosto che l’altra, andando di fatto a
+mantenere piena efficienza a livello di warp
+27. La shared memory è una memoria di piccole dimensioni, ma molto veloce, che abbiamo visto nell’immagine di prima ed è
+utilizzata dai thread appartenenti ad uno stesso block per accedere e condividere i dati in modo efficiente, è
+chiaramente molto più veloce della global memory ma ha una capienza minore. È di fatto la cache L1. È divisa in più
+banks per garantire l’accesso simultaneo ai dati da thread differenti. È gestibile dal programmatore tramite la
+direttiva __shared__. Dato che la gestione della memoria non è automatizzata possono verificarsi dei conflitti che ne
+vanno a ridurre l’efficacia
+28. Un modo per ‘evitare’ il tradizionale passaggio di dati che abbiamo introdotto all’inizio tra host e device sarebbe
+quello di sfruttare la unified memory che è stata resa disponibile all’incirca verso CUDA 6 (2013). Questa memoria non è
+altro che uno spazio condiviso sia dall’host che dal device che possono così condividere i dati senza dovere
+necessariamente sincronizzarsi a vicenda. A livello hardware questa memoria può essere sia completamente destinata nella
+ram della cpu, della gpu oppure può essere divisa tra le due a seconda della configurazione desiderata. Questo tipo di
+accesso alla memoria va a semplificare il codice e la gestione generale dei dati in quanto è l’hardware a gestire
+automaticamente l’allocazione, la migrazione e la deallocazione dei dati. Per questo motivo può introdurre overhead
+quando si verificano numerosi page fault (ovvero l’host o il device non trovano i dati in memoria locale ed è necessario
+una migrazione di questi)
