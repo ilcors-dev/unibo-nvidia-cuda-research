@@ -2,53 +2,85 @@ NVIDIA CUDA SPEECH
 
 
 1. INIZIO
-2. Ho scelto questo approfondimento perché nella mia carriera accademica non ho mai avuto modo di studiare le gpu e di
-come si programmano in particolareE soprattutto, dato il periodo storico, perché si parla spesso del loro ruolo
-fondamentale in questo momento storico di boom per l’intelligenza artificiale?
+
+2. Ho scelto questo argomento perché nella mia carriera accademica non ho mai avuto modo di studiare le gpu e di come si
+programmano in particolare. E soprattutto perché si parla spesso del loro ruolo fondamentale in questo momento storico
+di boom per l’intelligenza artificiale?
+
 3. Che cos’è CUDA? CUDA è l’acronimo di Compute Unified Device Architecture, è un estensione del linguaggio C/C++ e
-permette agli sviluppatori di eseguire programmi sulle GPU e di sfruttarne le potenzialità in termini di throughput.Oggi
-le GPU non si limitano ad essere utilizzate solo per la grafica, ma sono usate ad esempio in applicazioni scientifiche,
-nel deep learning. CUDA è quel layer intermedio che permette agli sviluppatori di programmare una GPU per algoritmi
-tipicamente destinati alle CPU, aprendo le porte al GPGPU (General-purpose computing on graphics processing)
+permette agli sviluppatori di eseguire programmi sulle GPU. Oggi le GPU non si limitano ad essere utilizzate solo per la
+grafica, ma sono usate ad esempio in applicazioni scientifiche e nel deep learning. CUDA è quindi quel layer intermedio
+che permette agli sviluppatori di eseguire applicazioni sulle GPU per algoritmi tipicamente destinati alle CPU, aprendo
+le porte al GPGPU (General-purpose computing on graphics processing)
+
 4. Prima di entrare nel dettaglio di CUDA è necessario però avere un’idea di come le GPU funzionano a livello
-architetturale.Le GPU sono essenzialmente delle macchine SIMD-like, composte da molti core che eseguono istruzioni
+architetturale. Le GPU sono essenzialmente delle macchine SIMD, composte da molti core che eseguono istruzioni
 in-order, cioè nell’ordine in cui sono specificate nel programma
-5. Ma cos’è SIMD? SIMD è una tipologia di parallel processing delle istruzioni che consiste nell’eseguire la stessa
-operazione su più dati distinti nello stesso momento sfruttando il cosiddetto DLP (Data Level Parallelism).Durante il
-corso abbiamo studiato un’altro tipo di approccio al parallelismo applicato alle CPU, chiamato ILP (instruction level
-parallelism). Il requisito fondamentale del DLP è che i dati non siano dipendenti tra loro e quindi si possa evitare di
-implementare una logica per il check dipendenze che ad esempio sono presenti nelle cpu, risparmiando così area di
-silicio che possono essere sfruttati in altro modo.Si possono distinguere due tipi di processori che implementano
-l’approccio SIMD:- array processors- vector processors
-6. La differenza principale tra questi due processori risiede sulla modalità di esecuzione delle istruzioni, in
-particolare gli array processors replicano le unità funzionali ed eseguono la stessa istruzione nello stesso istante su
-ciascuna di queste mentre i vector processor funzionano più come una pipeline in cui le istruzioni vengono eseguite in
-step in instanti di tempo diversi sullo stesso processore.Di fatto questa è una distinzione da puristi, nella realtà le
-GPU sono un mix di questi due
-7. In questo esempio abbiamo un’architettura in grado di gestire 32 elementi simultanei a 8 linee
-8. Tra i vantaggi di SIMD troviamo:+ l’efficienza energetica: meno cicli di fetch & decode, meno istruzioni di branch,
-meno idle time+ più istruzioni nello stesso ciclo di clock e quindi un maggiore throughput+ no hardware per il check
-sulle dipendenze sui dati, meno area di silicio utilizzataD’altra parte invece- la necessità di dover ripensare e
-riprogrammare gli algoritmi in funzione della specifica architettura -> sono difficili da programmare- funzionano solo
-se i dati sono dependency free- molto inefficienti se i dati non sono regolari in memoria (access patterns)
-9. Nelle GPU, il concetto di SIMD viene astratto attraverso un’altro modello chiamato SIMT (single instruction multiple
-thread) dove le istruzioni sono eseguite su dei THREAD, che rappresentano la più piccola unità logica che può essere
-eseguita su una GPU, non sono core fisici. Ogni thread è una sequenza di istruzioni che opera su dati diversi che la GPU
-può eseguire in maniera parallela sui propri core. La differenza con SIMD è che in questo modello lo sviluppatore non
-deve gestire manualmente la vettorizzazione dei dati ma può continuare a scrivere codice in modo sequenziale senza
-preoccuparsi di quello che succede a livello hardware.La GPU a livello hardware raggruppa i thread in blocchi da 32
-WARPs che eseguono la stessa istruzione nello stesso momento, condividendo di fatto lo stesso program counter
-10. Ad esempio, il concetto di warp è visualizzato qui come uno stack di WARP che vengono eseguiti in una pipeline SIMD
+
+5. Ma cos’è SIMD? SIMD, acronimo di Single Instruction Multiple data, è una tipologia di parallel processing delle
+istruzioni che consiste nell’eseguire la stessa operazione su più dati distinti nello stesso momento sfruttando il
+cosiddetto DLP (Data Level Parallelism). Durante il corso abbiamo studiato un’altro tipo di approccio al parallelismo
+applicato alle CPU, chiamato ILP (instruction level parallelism), ad esempio attraverso lo scoreboarding o Tomasulo. Il
+requisito fondamentale del DLP è che i dati non siano dipendenti tra loro e quindi si possa evitare di implementare una
+logica per il controllo delle dipendenze che ad esempio sono presenti nelle cpu, risparmiando così area di silicio che
+possono essere sfruttati in altro modo. Si possono distinguere due tipi di processori che implementano l’approccio SIMD:
+- array processors
+- vector processors
+
+6. La differenza principale tra questi due processori risiede nella modalità di esecuzione delle istruzioni. Gli array
+processors replicano le unità funzionali ed eseguono la stessa istruzione simultaneamente su ciascuna di esse. I vector
+processors, invece, funzionano più come una pipeline, eseguendo le istruzioni in fasi diverse sullo stesso processore.
+In pratica, questa distinzione è teorica, poiché le GPU moderne combinano caratteristiche di entrambi i tipi di
+processori.
+
+7. In questo esempio abbiamo un’architettura in grado di gestire 32 elementi simultanei a 8 linee, che combina sia un
+array che un vector processor
+
+8. Tra i vantaggi di SIMD troviamo l’efficienza energetica, poiché richiede meno cicli di fetch e decode, meno
+istruzioni di branch e riduce il tempo di inattività. Inoltre, consente di eseguire più istruzioni nello stesso ciclo di
+clock, aumentando il throughput. Un altro vantaggio è che non necessita di hardware per il controllo delle dipendenze
+sui dati, utilizzando meno area di silicio.
+
+D'altra parte, SIMD presenta alcuni svantaggi. Gli algoritmi devono essere ripensati e riprogrammati in funzione della
+specifica architettura, rendendoli difficili da programmare. Inoltre, SIMD funziona solo se i dati sono privi di
+dipendenze e risulta molto inefficiente se i dati non sono regolari in memoria, ovvero se i pattern di accesso non sono
+uniformi.
+
+9. Venendo alle GPU, il concetto di SIMD viene astratto attraverso un’altro modello chiamato SIMT (single instruction
+multiple thread) dove le istruzioni sono eseguite su dei THREAD, che rappresentano la più piccola unità logica che può
+essere eseguita su una GPU, non sono da confondere con core fisici. Ogni thread è una sequenza di istruzioni che opera
+su dati diversi che la GPU può eseguire in maniera parallela sui propri core fisici. La differenza con SIMD è che in
+questo modello lo sviluppatore non deve gestire manualmente la vettorizzazione dei dati, ma può continuare a scrivere
+codice in modo sequenziale senza preoccuparsi di quello che succede a livello hardware. La GPU a livello hardware
+raggruppa i thread in blocchi da 32 WARPs che eseguono la stessa istruzione nello stesso momento, condividendo di fatto
+lo stesso program counter.
+
+In sostanza il modello SIMT delle GPU offre una maggiore scalabilità e flessibilità rispetto al modello SIMD, in quanto
+implementa il cosiddetto FGMT (Finegrained multi-threading) facendo si che la gpu possa gestire un gran numero di thread
+in parallelo e permettendo percorsi di esecuzione divergenti. Mentre SIMD richiede che tutte le unità eseguano la stessa
+istruzione contemporaneamente, SIMT consente a ogni thread di avere il proprio contesto di esecuzione.
+
+10. Ad esempio, il concetto di warp è visualizzato qui come uno stack di WARP che vengono schedulati ed eseguiti in una
+pipeline SIMD. Ogni WARP è composto da 32 thread che eseguono la stessa istruzione nello stesso momento e condividono lo
+stesso program counter. In caso di branch la gpu gestisce il PC in sottoinsiemi di thread, fino a che i path non si
+ricongiungono
+
 11. Forse da togliere
+
 12. La stessa immagine che abbiamo visto in precedenza per SIMD, può essere adattata per il modello SIMT dove al posto
 dell’issuing delle singole istruzioni abbiamo l’issuing di WARPs
-13. Qui possiamo vedere come l’esecuzione dei thread può essere divisa in una o più pipeline differenti
-14. Ma dove vengono effettivamente eseguiti questi thread? Qui possiamo vedere l’architettura Fermi, introdotta nel 2008
-da Nvidia in cui possono essere riconosciuti una cache L2, 4 GPC (Graphics Processing Cluster) al cui interno possiamo
-trovare 4 Streaming MultiProcessors, il cui scopo è gestire i warp e schedulare l’esecuzione delle istruzioni. Ogni
-Streaming Multiprocessor è composto da 16 Streaming Processors, che sono l’effettivo motore motore della GPU, sui quali
-vengono eseguiti i threads. Si possono anche notare un Register File da 32KB e 64KB di L1 cache. Gli streaming
-processors sono anche chiamati CUDA cores
+
+13. Qui possiamo vedere la distinzione di fatto tra un array processor & un vector processor e come l'elaborazione dei
+dati avviene in parallelo su più elementi.
+
+14. Ma dove vengono effettivamente eseguiti questi thread? Prendendo come esempio l’architettura Fermi, introdotta nel
+2008 da Nvidia i thread vengono eseguiti su piccoli CORE, chiamati CUDA core, che risiedono all'interno di strutture
+chiamate Streaming Multiprocessor. Ogni Streaming Multiprocessor è composto da 32 CUDA cores, 8 Special Function Units,
+4 Load/Store Units e 16 Double Precision Units. La funzione dello Streaming Multiprocessor è quella di schedulare
+l'esecuzione dei WARPs, gestire la memoria condivisa e la cache L1. Può essere messo a confronto, di fatto, con una
+processore classico: si occupa dell'instruction fetch, il decode, l'execute, il memory access e il writeback, i branch,
+le load e le store e così via. Si possono anche notare un Register File da 32KB e 64KB di L1 cache.
+
 15. Mettendo a confronto uno schema, molto semplificato, di una CPU & di un GPU possiamo notare queste essenziali
 differenze: le CPU hanno pochi, ma molto potenti, core in grado di eseguire le istruzioni in a out-of-order fashion
 mentre le GPU hanno molti più core, meno potenti e semplici che eseguono le istruzioni in-order. Le CPU sono pensate per
