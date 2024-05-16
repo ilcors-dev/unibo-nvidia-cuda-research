@@ -1,0 +1,48 @@
+.version 8.4       // ISA VERSION
+.target sm_52      // Compute capability 5.2
+.address_size 64   // 64-bit addresses
+
+	// .globl	_Z5saxpyifPfS_
+
+.visible .entry _Z5saxpyifPfS_(
+	.param .u32 _Z5saxpyifPfS__param_0,  // int n
+	.param .f32 _Z5saxpyifPfS__param_1,  // float a
+	.param .u64 _Z5saxpyifPfS__param_2,  // float* x
+	.param .u64 _Z5saxpyifPfS__param_3   // float* y
+)
+{
+	.reg .pred 	%p<2>;
+	.reg .f32 	%f<5>;
+	.reg .b32 	%r<6>;
+	.reg .b64 	%rd<8>;
+
+	// Load parameters
+	ld.param.u32 	%r2, [_Z5saxpyifPfS__param_0];  // int n
+	ld.param.f32 	%f1, [_Z5saxpyifPfS__param_1];  // float a
+	ld.param.u64 	%rd1, [_Z5saxpyifPfS__param_2]; // float* x
+	ld.param.u64 	%rd2, [_Z5saxpyifPfS__param_3]; // float* y
+
+	// Calculate global thread index
+	mov.u32 	%r3, %ctaid.x;      // blockIdx.x
+	mov.u32 	%r4, %ntid.x;       // blockDim.x
+	mov.u32 	%r5, %tid.x;        // threadIdx.x
+	mad.lo.s32 	%r1, %r3, %r4, %r5; // i = blockIdx.x * blockDim.x + threadIdx.x
+
+	// if (i < n)
+	setp.ge.s32 	%p1, %r1, %r2;  
+	@%p1 bra 	$L__BB0_2;
+
+	// Body of the if condition
+	cvta.to.global.u64 	%rd3, %rd2;   // Convert y to global address space
+	cvta.to.global.u64 	%rd4, %rd1;   // Convert x to global address space
+	mul.wide.s32 	%rd5, %r1, 4;     // Compute byte offset (i * sizeof(float))
+	add.s64 	%rd6, %rd4, %rd5;     // Compute address of x[i]
+	ld.global.f32 	%f2, [%rd6];      // Load x[i]
+	add.s64 	%rd7, %rd3, %rd5;     // Compute address of y[i]
+	ld.global.f32 	%f3, [%rd7];      // Load y[i]
+	fma.rn.f32 	%f4, %f2, %f1, %f3;   // Compute a * x[i] + y[i]
+	st.global.f32 	[%rd7], %f4;      // Store the result back to y[i]
+
+$L__BB0_2:
+	ret;
+}
