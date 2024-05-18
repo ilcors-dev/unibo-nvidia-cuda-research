@@ -166,3 +166,34 @@ accesso alla memoria va a semplificare il codice e la gestione generale dei dati
 automaticamente l’allocazione, la migrazione e la deallocazione dei dati. Per questo motivo può introdurre overhead
 quando si verificano numerosi page fault (ovvero l’host o il device non trovano i dati in memoria locale ed è necessario
 una migrazione di questi)
+
+29. Possiamo finalmente arrivare a parlare di un esempio pratico di come si può scrivere un programma in CUDA. In questo
+caso abbiamo un semplice programma che effettua una SAXPY, ovvero a Single-Precision A*X Plus Y, operazione molto comune
+nel calcolo scientifico. La keyword __global__ indica che la funzione è eseguita sulla GPU, vengono passati: la
+dimensione massima dei vettori n, lo scalare a e i puntatori ai vettori x e y. Dato che stiamo parlando di vettori,
+l'allocazione in memoria e l'accesso ai thread avviene in 1 dimensione.
+
+30. Il codice dell'host, ovvero la CPU, consiste nella maggior parte nella preparazione dei dati e nella chiamata del
+kernel. Possiamo vedere che l'operazione è eseguita su un campione di 500_000_000 (500 milioni) di float a singola
+precisione, che vengono allocati in ram (occupando circa 3.75 GB di ram) sull'host, poi copiati nella memoria della GPU,
+vengono elaborati dal kernel e infine copiati nuovamente nella ram dell'host. Un punto fondamentale da notare è la parte
+di esecuzione del kernel, dove si specifica la dimensione del blocco e quanti saranno necessari per processare tutti gli
+elementi dei vettori. In questo caso ho definito una blockSize di 256 thread per blocco.
+Notare che non viene usata la unified memory in questo esempio.
+
+31. Per compilare questo programma, abbiamo bisogno del compilatore CUDA, chiamato NVCC. Il compilatore prende il codice
+sorgente, divide il codice in parti eseguibili sulla CPU e sulla GPU, compila il codice CUDA che viene tradotto in PTX
+che non rappresenta altro che un assembly di alto livello per la GPU, e infine il PTX viene compilato in codice macchina
+per la GPU, chiamato SASS, che è specifico per l'architettura della GPU usata. Il codice compilato per la CPU e per la GPU viene poi linkato insieme per creare l'eseguibile finale.
+
+32. Eseguendo questo codice sul mio computer fisso con queste specifiche, abbiamo un tempo di esecuzione totale di circa 
+15 millisecondi
+
+33. Possiamo vedere gli step citati prima di allocazione ed esecuzione del kernel nel Task Manager del computer
+
+34. E possiamo infine notare la differenza che lo stesso codice, scritto per una CPU senza sfruttare il multithreading,
+sia estremamente più lento rispetto alla versione scritta per la GPU
+
+35. In conclusione ho imparato che, CUDA è un'api per poter abilitare la programmazione parallela su GPU, il modo di
+programmare una GPU non è tanto diverso da quello di una CPU, ma richiede una conoscenza più approfondita dell'hardware
+sottostante e soprattutto di come i dati vengono gestiti in memoria.
