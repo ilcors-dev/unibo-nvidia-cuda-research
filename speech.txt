@@ -79,7 +79,7 @@ chiamate Streaming Multiprocessor. Ogni Streaming Multiprocessor è composto da 
 4 Load/Store Units e 16 Double Precision Units. La funzione dello Streaming Multiprocessor è quella di schedulare
 l'esecuzione dei WARPs, gestire la memoria condivisa e la cache L1. Può essere messo a confronto, di fatto, con una
 processore classico: si occupa dell'instruction fetch, il decode, l'execute, il memory access e il writeback, i branch,
-le load e le store e così via. Si possono anche notare un Register File da 32KB e 64KB di L1 cache.
+le load e le store e così via.
 
 15. Mettendo a confronto uno schema, molto semplificato, di una CPU & di un GPU possiamo notare queste essenziali
 differenze: le CPU hanno pochi, ma molto potenti, core in grado di eseguire le istruzioni in a out-of-order fashion
@@ -88,56 +88,75 @@ eseguire programmi ed algoritmi general purpose, mentre le gpu sono limitate in 
 algoritmi che risultano essere facilmente parallelizzabili dove i dati non sono dipendenti tra di loro. CPU e GPU
 collaborano insieme durante l’esecuzione di un programma dove le parti più adatte ad essere eseguite sulla gpu vengono
 ‘scaricate’ su di essa per migliorare e velocizzare l’esecuzione dell’applicazione.
+
 16. Quindi, avendo capito a grandi linee come funziona una gpu, possiamo finalmente arrivare a parlare di come possiamo
 eseguire dei programmi su di essa. Per prima cosa è bene chiarire la terminologia, in particolare in CUDA le CPU sono
-chiamate HOST, mentre le GPU device. Notare che un sistema può essere dotato di N device e di M CPU.Come avviene l’avvio
-di un’esecuzione su di un device? In sostanza si ha che la CPU per prima cosa copia i dati necessari all’esecuzione
-nella memoria della GPU, lancia l’esecuzione sulla GPU che una volta terminata copia il risultato verso la memoria della
-cpu.
-17. In CUDA, è necessario distinguere e capire 3 concetti principali: - il primo, che abbiamo già visto sono i thread,
-che sono la più piccola unità logica che la gpu gestisce ed esegue all’interno dei cuda core- poi abbiamo i blocks, che
-non sono altro che un raggruppamento di thread a livello software da non confondere con i warp che rappresentano
-l’implementazione hardware. A livello hardware questi possono essere visti come un’astrazione degli Streaming
-Multiprocessor, i quali schedulano l’esecuzione dei propri thread i quali hanno accesso alla stessa memoria condivisa-
-ed infine le grids che rappresentano una collezione di blocks, distribuiti su molteplici Streaming Multiprocessors
+chiamate HOST, mentre le GPU device. Notare che un sistema può essere dotato di N device e di M CPU. Sapendo quindi che,
+un'applicazione è comunque una collaborazione tra questi dispositivi, come avviene l’avvio di un’esecuzione su di un
+device? In sostanza si ha che la CPU per prima cosa copia i dati necessari all’esecuzione nella memoria della GPU,
+lancia l’esecuzione sulla GPU (lancia un kernel) che una volta terminata copia il risultato verso la memoria della cpu.
+
+17. In CUDA, è necessario distinguere e capire 3 concetti principali: 
+- il primo, che abbiamo già visto sono i thread, che sono la più piccola unità logica che la gpu gestisce ed esegue 
+all’interno dei cuda core
+- poi abbiamo i blocks, che non sono altro che un raggruppamento di thread a livello software da non confondere con i
+warp che rappresentano l’implementazione hardware. A livello hardware questi possono essere visti come un’astrazione
+degli Streaming Multiprocessor, i quali schedulano l’esecuzione dei propri thread i quali hanno accesso alla stessa
+memoria condivisa
+- ed infine le grids che rappresentano una collezione di blocks, distribuiti su molteplici Streaming Multiprocessors
+
 18. Immagine che descrive quanto detto sopra
-19. Qui abbiamo un po’ di funzioni di base che CUDA espone al programmatore,- troviamo ad esempio la definizione
-fondamentale di kernel, che non rappresenta altro che una funzione eseguita sulla GPU- la malloc per copiare allocare
-memoria sulla gpu- cudaMemCpy per la copia dei dati dalla cpu alla gpu e viceversa- come si lancia un kernel su una GPU-
-come si libera memoria dalla GPU- e come è possibile sincronizzare i thread in esecuzione
+
+19. Qui ci sono alcune delle API che espone CUDA al programmatore:
+- troviamo ad esempio la definizione fondamentale di kernel, che non rappresenta altro che una funzione eseguita sulla GPU
+- la cudaMalloc per allocare memoria sulla gpu
+- cudaMemCpy per la copia dei dati dalla cpu alla gpu e viceversa
+- come si lancia un kernel su una GPU
+- come si libera memoria dalla GPU
+- e come è possibile sincronizzare i thread in esecuzione
+
 20. Come fa il programmatore ad accedere ad un determinato thread in esecuzione? Come vengono allocati in memoria i
 thread? Ci sono essenzialmente 3 modi diversi che il programmatore può scegliere: 1D (vettore), 2D (matrice) e 3D. A
 seconda della disposizione dei thread in memoria ogni thread può essere acceduto attraverso l’uso di queste variabili
 disponibili che rappresentano la posizione del thread nel block, del block nella grid, quanti thread sono disponibili in
 ogni block in ogni direzione e quanti blocks sono disponibili in ogni griglia in ogni direzione
+
 21. La rappresentazione a una dimensione è la più semplice, dove i dati sono disposti in row-major layout e ogni thread
 viene acceduto tramite in questo modo
+
 22. La rappresentazione a Matrice invece è un pochino più complessa x
-23. Un concetto importante per le performance dei programmi CUDA è capire organizzare i dati in memoria in modo tale che
-la GPU possa eseguire nel modo più efficiente possibile. Questo concetto viene chiamato coalescing, sopra abbiamo un
-esempio di accesso not coalesced dove i dati sono organizzati in row major. L’accesso non è ottimizzato perchè i thread,
-nella stessa esecuzione non accedono a dati contigui perciò non è possibile per la GPU prelevare, in uno scenario
-ipotetico, i dati necessari in un unico accesso alla memoria introducendo quindi latenza nell’operazione.Nell’immagine
-sotto invece i dati sono organizzati in column-major e la GPU è in grado di leggere i dati in un’unica transazione verso
-la memoria. Questo accesso è altamente ottimizzato e viene detto coalesced memory access
+
+23. Un aspetto fondamentale per ottimizzare le prestazioni in CUDA è l'organizzazione ottimale dei dati in memoria, che
+permette alla GPU di operare con massima efficienza. Questo concetto è noto come coalescing. Nell'esempio citato,
+vediamo un strided access con dati organizzati in row-major; qui i thread accedono a dati non contigui, creando uno
+stride. Questo impedisce alla GPU di recuperare tutti i dati necessari in un unico accesso alla memoria, aumentando così
+la latenza. Al contrario, con una disposizione column-major, i thread accedono a dati consecutivi, consentendo alla GPU
+di realizzare operazioni di memoria ottimizzate in un'unica transazione. Questo tipo di accesso, detto coalesced memory
+access, è estremamente efficiente e riduce significativamente il numero di accessi alla memoria.
+
 24. Il concetto di latency hiding invece è una proprietà derivata dal modello SIMT, in cui lo scheduler della GPU in
 ogni streaming processor può effettuare lo switch di contesto dei warp che per un determinato motivo sono in attesa e
 rimpiazzarli invece con un warp libero di eseguire portando così la gpu ad avere una migliore occupazione, definita come
 il rapporto tra i warp attivi e il numero massimo di warp eseguibili sullo streaming multiprocessor
-25. Come vengono gestiti i branch nel codice? Abbiamo visto che l’architettura SIMD riduce la necessità delle istruzioni
-condizionali, senza però ridurle del tutto. In caso di branch, ogni thread all’interno di un warp può prendere ‘path’
-diversi creando la cosiddetta intrawrap-divergence riducendo così l’efficienza generale della gpu. La risoluzione a
-questo problema è lasciata al programmatore, infatti è compito suo definire in modo appropriato i branch in modo che non
-si verifichi l’intrawarp-divergence
+
+25. In CUDA, l'architettura SIMD implica una gestione particolare dei branch nel codice. Sebbene questa architettura
+riduca la necessità di istruzioni condizionali, non le elimina completamente. Quando si verifica un branch, ogni thread
+all'interno di un warp può seguire percorsi diversi, creando la cosiddetta 'intrawarp divergence'. Questa divergenza
+riduce l'efficienza generale della GPU poiché tutti i thread di un warp devono attendere fino a quando non si
+riconvergono. Per minimizzare questo problema, spetta al programmatore strutturare i branch in modo che la divergenza
+intrawarp sia ridotta, ottimizzando così l'esecuzione parallela.
+
 26. In questo esempio, il primo blocco di codice a sinistra mostra una gestione dei branch non ottimizzata mentre quello
 a destra permette 32 thread, ovvero un intero warp, di eseguire una strada piuttosto che l’altra, andando di fatto a
 mantenere piena efficienza a livello di warp
-27. La shared memory è una memoria di piccole dimensioni, ma molto veloce, che abbiamo visto nell’immagine di prima ed è
-utilizzata dai thread appartenenti ad uno stesso block per accedere e condividere i dati in modo efficiente, è
-chiaramente molto più veloce della global memory ma ha una capienza minore. È di fatto la cache L1. È divisa in più
-banks per garantire l’accesso simultaneo ai dati da thread differenti. È gestibile dal programmatore tramite la
-direttiva __shared__. Dato che la gestione della memoria non è automatizzata possono verificarsi dei conflitti che ne
-vanno a ridurre l’efficacia
+
+27. La shared memory è un tipo di memoria di piccole dimensioni ma ad alta velocità utilizzata dai thread di uno stesso
+block per condividere dati in modo efficiente. Rispetto alla global memory, offre tempi di accesso notevolmente
+inferiori, sebbene abbia una capacità limitata. Nonostante sia simile alla cache L1, non è automatizzata e richiede una
+gestione esplicita tramite la direttiva __shared__. La shared memory è organizzata in banks, che permettono
+accessi simultanei da parte di diversi thread. Tuttavia, questa organizzazione può portare a conflitti di bank, i quali
+riducono l'efficienza di accesso e, di conseguenza, l'efficacia complessiva della memoria condivisa.
+
 28. Un modo per ‘evitare’ il tradizionale passaggio di dati che abbiamo introdotto all’inizio tra host e device sarebbe
 quello di sfruttare la unified memory che è stata resa disponibile all’incirca verso CUDA 6 (2013). Questa memoria non è
 altro che uno spazio condiviso sia dall’host che dal device che possono così condividere i dati senza dovere
