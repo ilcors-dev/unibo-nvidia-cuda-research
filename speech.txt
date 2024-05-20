@@ -7,11 +7,7 @@ NVIDIA CUDA SPEECH
 programmano in particolare. E soprattutto perché si parla spesso del loro ruolo fondamentale in questo momento storico
 di boom per l’intelligenza artificiale?
 
-3. Che cos’è CUDA? CUDA è l’acronimo di Compute Unified Device Architecture, è un estensione del linguaggio C/C++ e
-permette agli sviluppatori di eseguire programmi sulle GPU. Oggi le GPU non si limitano ad essere utilizzate solo per la
-grafica, ma sono usate ad esempio in applicazioni scientifiche e nel deep learning. CUDA è quindi quel layer intermedio
-che permette agli sviluppatori di eseguire applicazioni sulle GPU per algoritmi tipicamente destinati alle CPU, aprendo
-le porte al GPGPU (General-purpose computing on graphics processing)
+3. Cos'è CUDA? CUDA, acronimo di Compute Unified Device Architecture, è un'estensione del linguaggio C/C++ che consente agli sviluppatori di eseguire programmi sulle GPU. Oggi, le GPU non sono più utilizzate solo per la grafica, ma trovano applicazione anche in ambiti scientifici e nel deep learning. CUDA funge da strato intermedio, permettendo l'esecuzione di algoritmi tipicamente destinati alle CPU sulle GPU, aprendo le porte al GPGPU (General-purpose computing on graphics processing units).
 
 4. Prima di entrare nel dettaglio di CUDA è necessario però avere un’idea di come le GPU funzionano a livello
 architetturale. Le GPU sono essenzialmente delle macchine SIMD, composte da molti core che eseguono istruzioni
@@ -22,43 +18,26 @@ istruzioni che consiste nell’eseguire la stessa operazione su più dati distin
 cosiddetto DLP (Data Level Parallelism). Durante il corso abbiamo studiato un’altro tipo di approccio al parallelismo
 applicato alle CPU, chiamato ILP (instruction level parallelism), ad esempio attraverso lo scoreboarding o Tomasulo. Il
 requisito fondamentale del DLP è che i dati non siano dipendenti tra loro e quindi si possa evitare di implementare una
-logica per il controllo delle dipendenze che ad esempio sono presenti nelle cpu, risparmiando così area di silicio che
-possono essere sfruttati in altro modo. Si possono distinguere due tipi di processori che implementano l’approccio SIMD:
+logica per il controllo delle dipendenze, risparmiando così area di silicio che
+Può essere sfruttati in altro modo. Si possono distinguere due tipi di processori che implementano l’approccio SIMD:
 - array processors
 - vector processors
 
 6. La differenza principale tra questi due processori risiede nella modalità di esecuzione delle istruzioni. Gli array
 processors replicano le unità funzionali ed eseguono la stessa istruzione simultaneamente su ciascuna di esse. I vector
 processors, invece, funzionano più come una pipeline, eseguendo le istruzioni in fasi diverse sullo stesso processore.
+Pensandoci gli array processor sono un po' idealistici, cosa succederebbe se avessimo ad esempio una vector length (ovvero quanti dati stiamo processando) di 1 milione di elementi? Avremmo bisogno di 1 milione di FU replicate, che è un po' irrealistico!
 In pratica, questa distinzione è teorica, poiché le GPU moderne combinano caratteristiche di entrambi i tipi di
 processori.
 
-7. In questo esempio abbiamo un’architettura in grado di gestire 32 elementi simultanei a 8 linee, che combina sia un
-array che un vector processor
+7. In questo esempio abbiamo un’architettura in grado con vector length uguale a 32 a 8 linee, che combina sia un
+array che un vector processor. Di fatto succede che ad ogni instruction issue, vengono elaborati 8 elementi in parallelo per unità funzionale, per arrivare a 24 operazioni effettuate ad ogni ciclo.
 
-8. Tra i vantaggi di SIMD troviamo l’efficienza energetica, poiché richiede meno cicli di fetch e decode, meno
-istruzioni di branch e riduce il tempo di inattività. Inoltre, consente di eseguire più istruzioni nello stesso ciclo di
-clock, aumentando il throughput. Un altro vantaggio è che non necessita di hardware per il controllo delle dipendenze
-sui dati, utilizzando meno area di silicio.
+8. Tra i vantaggi di SIMD troviamo l’efficienza energetica, poiché richiede meno cicli di fetch e decode, meno istruzioni di branch e maggiore occupazione del processore, riducendo così il tempo di inattività. Inoltre, non necessita di hardware per il controllo delle dipendenze sui dati, utilizzando meno area di silicio. D'altra parte, SIMD presenta alcuni svantaggi. Gli algoritmi devono essere ripensati e riprogrammati in funzione della specifica architettura, rendendoli difficili da programmare. Inoltre, SIMD funziona solo se i dati sono privi di dipendenze e risulta molto inefficiente se i dati non sono regolari in memoria (stride > 1), ovvero se i pattern di accesso non sono uniformi.
 
-D'altra parte, SIMD presenta alcuni svantaggi. Gli algoritmi devono essere ripensati e riprogrammati in funzione della
-specifica architettura, rendendoli difficili da programmare. Inoltre, SIMD funziona solo se i dati sono privi di
-dipendenze e risulta molto inefficiente se i dati non sono regolari in memoria, ovvero se i pattern di accesso non sono
-uniformi.
+9. Venendo alle GPU, il concetto di SIMD viene astratto attraverso un altro modello chiamato SIMT (single instruction multiple thread), dove le istruzioni sono eseguite su thread, la più piccola unità logica che può essere eseguita su una GPU. Questi thread non sono da confondere con i core fisici. Ogni thread è una sequenza di istruzioni che opera su dati diversi e che la GPU può eseguire in parallelo sui propri core fisici. La differenza con SIMD è che, in questo modello, lo sviluppatore non deve gestire manualmente la vettorizzazione dei dati, ma può continuare a scrivere codice in modo sequenziale senza preoccuparsi dell'hardware. La GPU raggruppa i thread in blocchi da 32 chiamati WARPs, che eseguono la stessa istruzione nello stesso momento, condividendo lo stesso program counter.
 
-9. Venendo alle GPU, il concetto di SIMD viene astratto attraverso un’altro modello chiamato SIMT (single instruction
-multiple thread) dove le istruzioni sono eseguite su dei THREAD, che rappresentano la più piccola unità logica che può
-essere eseguita su una GPU, non sono da confondere con core fisici. Ogni thread è una sequenza di istruzioni che opera
-su dati diversi che la GPU può eseguire in maniera parallela sui propri core fisici. La differenza con SIMD è che in
-questo modello lo sviluppatore non deve gestire manualmente la vettorizzazione dei dati, ma può continuare a scrivere
-codice in modo sequenziale senza preoccuparsi di quello che succede a livello hardware. La GPU a livello hardware
-raggruppa i thread in blocchi da 32 WARPs che eseguono la stessa istruzione nello stesso momento, condividendo di fatto
-lo stesso program counter.
-
-In sostanza il modello SIMT delle GPU offre una maggiore scalabilità e flessibilità rispetto al modello SIMD, in quanto
-implementa il cosiddetto FGMT (Finegrained multi-threading) facendo si che la gpu possa gestire un gran numero di thread
-in parallelo e permettendo percorsi di esecuzione divergenti. Mentre SIMD richiede che tutte le unità eseguano la stessa
-istruzione contemporaneamente, SIMT consente a ogni thread di avere il proprio contesto di esecuzione.
+In sostanza, il modello SIMT delle GPU offre maggiore scalabilità e flessibilità rispetto al modello SIMD, implementando il cosiddetto FGMT (Finegrained Multi-Threading). Questo permette alla GPU di gestire un gran numero di thread in parallelo, mentre SIMD richiede che tutte le unità eseguano la stessa istruzione contemporaneamente. SIMT consente invece a ogni thread di avere il proprio contesto di esecuzione.
 
 10. Ad esempio, il concetto di warp è visualizzato qui come uno stack di WARP che vengono schedulati ed eseguiti in una
 pipeline SIMD. Ogni WARP è composto da 32 thread che eseguono la stessa istruzione nello stesso momento e condividono lo
@@ -70,8 +49,7 @@ ricongiungono
 12. La stessa immagine che abbiamo visto in precedenza per SIMD, può essere adattata per il modello SIMT dove al posto
 dell’issuing delle singole istruzioni abbiamo l’issuing di WARPs
 
-13. Qui possiamo vedere la distinzione di fatto tra un array processor & un vector processor e come l'elaborazione dei
-dati avviene in parallelo su più elementi.
+13. Per riprendere la differenza tra vector & array processor abbiamo qui ad esempio una rappresentazione di un'ipotetica esecuzione nell'hardware di una GPU, dove un WARP che effettua una somma tra un vettore A & B verso C può essere diciamo spalmato su più FU units pipelined
 
 14. Ma dove vengono effettivamente eseguiti questi thread? Prendendo come esempio l’architettura Fermi, introdotta nel
 2008 da Nvidia i thread vengono eseguiti su piccoli CORE, chiamati CUDA core, che risiedono all'interno di strutture
@@ -96,14 +74,13 @@ un'applicazione è comunque una collaborazione tra questi dispositivi, come avvi
 device? In sostanza si ha che la CPU per prima cosa copia i dati necessari all’esecuzione nella memoria della GPU,
 lancia l’esecuzione sulla GPU (lancia un kernel) che una volta terminata copia il risultato verso la memoria della cpu.
 
-17. In CUDA, è necessario distinguere e capire 3 concetti principali: 
-- il primo, che abbiamo già visto sono i thread, che sono la più piccola unità logica che la gpu gestisce ed esegue 
-all’interno dei cuda core
-- poi abbiamo i blocks, che non sono altro che un raggruppamento di thread a livello software da non confondere con i
-warp che rappresentano l’implementazione hardware. A livello hardware questi possono essere visti come un’astrazione
-degli Streaming Multiprocessor, i quali schedulano l’esecuzione dei propri thread i quali hanno accesso alla stessa
-memoria condivisa
-- ed infine le grids che rappresentano una collezione di blocks, distribuiti su molteplici Streaming Multiprocessors
+17. In CUDA, è necessario distinguere e comprendere tre concetti principali:
+
+- Thread: Il primo concetto, che abbiamo già esaminato, sono i thread, che rappresentano la più piccola unità logica gestita ed eseguita dalla GPU. Ogni thread ha il proprio ID univoco all'interno del blocco e può eseguire istruzioni in parallelo con altri thread.
+
+- Block: Successivamente, abbiamo i blocchi (blocks), che sono raggruppamenti di thread a livello software. Non devono essere confusi con i warp, che rappresentano l'implementazione hardware. A livello hardware, i blocchi possono essere visti come un'astrazione degli Streaming Multiprocessor (SM). Ogni SM può eseguire simultaneamente più blocchi, a seconda delle risorse disponibili (come memoria condivisa e registri). I thread all'interno di un blocco possono cooperare utilizzando la memoria condivisa e possono sincronizzarsi tramite barriere (__syncthreads()).
+
+- Grid: Infine, le griglie (grids) rappresentano una collezione di blocchi distribuiti su molteplici Streaming Multiprocessors (SM). Quando viene lanciato un kernel, i blocchi della griglia sono distribuiti tra gli SM disponibili. La griglia consente di scalare l'esecuzione parallela su un'ampia gamma di GPU con diverse capacità di calcolo, poiché la gestione della distribuzione e dell'esecuzione dei blocchi viene gestita dal runtime CUDA.
 
 18. Immagine che descrive quanto detto sopra
 
@@ -122,7 +99,7 @@ disponibili che rappresentano la posizione del thread nel block, del block nella
 ogni block in ogni direzione e quanti blocks sono disponibili in ogni griglia in ogni direzione
 
 21. La rappresentazione a una dimensione è la più semplice, dove i dati sono disposti in row-major layout e ogni thread
-viene acceduto tramite in questo modo
+viene acceduto in questo modo
 
 22. La rappresentazione a Matrice invece è un pochino più complessa x
 
@@ -143,7 +120,7 @@ il rapporto tra i warp attivi e il numero massimo di warp eseguibili sullo strea
 riduca la necessità di istruzioni condizionali, non le elimina completamente. Quando si verifica un branch, ogni thread
 all'interno di un warp può seguire percorsi diversi, creando la cosiddetta 'intrawarp divergence'. Questa divergenza
 riduce l'efficienza generale della GPU poiché tutti i thread di un warp devono attendere fino a quando non si
-riconvergono. Per minimizzare questo problema, spetta al programmatore strutturare i branch in modo che la divergenza
+riconvergano. Per minimizzare questo problema, spetta al programmatore strutturare i branch in modo che la divergenza
 intrawarp sia ridotta, ottimizzando così l'esecuzione parallela.
 
 26. In questo esempio, il primo blocco di codice a sinistra mostra una gestione dei branch non ottimizzata mentre quello
