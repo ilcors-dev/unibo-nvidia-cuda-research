@@ -8,7 +8,7 @@ The repository is structured as follows:
 - `notes/` contains the notes taken from various sources
 - `resources/` contains the resources used for the research (books, papers, presentations, etc.)
     - Some papers are password protected as they are licensed for the University of Bologna & its students only.
-- `code/` contains the actual code example used for the research to understand the CUDA architecture (TODO)
+- `code/` contains the actual code example used for the research to understand the CUDA architecture
 
 ## Bibliography
 
