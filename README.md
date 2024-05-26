@@ -34,3 +34,18 @@ URL: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5586593&isnumber=
 
 - An Even Easier Introduction to CUDA \
 URL: https://developer.nvidia.com/blog/even-easier-introduction-cuda/
+
+- CUDA Programming Guide \
+URL: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+
+- A history of NVIDIA Stream Multiprocessor \
+URL: https://fabiensanglard.net/cuda/
+
+- CUDA Grid-Stride Loops \
+URL: https://developer.nvidia.com/blog/cuda-pro-tip-write-flexible-kernels-grid-stride-loops/
+
+- CUDA refresher \
+URL: https://developer.nvidia.com/blog/tag/cuda-refresher/
+
+- Understanding SPs & SMs \
+URL: https://stackoverflow.com/questions/2207171/how-much-is-run-concurrently-on-a-gpu-given-its-numbers-of-sms-and-sps/2213744#2213744
